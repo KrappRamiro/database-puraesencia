@@ -1,10 +1,9 @@
 import sqlite3
-from tkinter import *
 from tkinter import messagebox
 def connect_to_database():
 	try:
 		print("Starting connection with database")
-		messagebox.showinfo("Informacion", "Conectando a base de datos")
+		#messagebox.showinfo("Informacion", "Conectando a base de datos")
 		db_connection = sqlite3.connect("database.sqlite3")
 		db_cursor = db_connection.cursor()	
 		db_cursor.execute('''
@@ -55,12 +54,4 @@ def connect_to_database():
 	except:
 		messagebox.showerror("Error","Ha ocurrido un error desconocido conectando a la base de datos")
 
-root = Tk()
-root.attributes('-type', 'dialog')  # abrir en floating mode
 
-mi_frame = Frame(root)
-mi_frame.config(width=300, height=400)
-mi_frame.pack()
-
-connect_to_database()
-root.mainloop()
