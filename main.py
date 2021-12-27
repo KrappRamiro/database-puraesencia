@@ -117,13 +117,47 @@ def category_entry_window():
 	Window = Toplevel()
 	Window.attributes('-type', 'dialog')
 
-	# ID
-	Label(Window, text="Category name").grid(row=0, column=0)
+	# Entrada de categoria
+	Label(Window, text="Categoria").grid(row=0, column=0)
 	Entry(Window, textvariable=category_name).grid(
 		row=0, column=1, pady=10, padx=5)
 
 	button_cargar_datos = Button(Window, text="Cargar datos", command=lambda: create())
 	button_cargar_datos.grid(row=6, column=0, pady=5, padx=5)
+
+def product_entry_window():
+	def create():
+		db_connection= sqlite3.connect("database.sqlite3")
+		db_cursor = db_connection.cursor()
+
+		print( "Recieved the following arguments:", title.get())
+		db_cursor.execute('''
+			INSERT INTO Categories
+			VALUES(?,?)''',(None,category, title.get())
+		)
+		db_connection.commit()
+	
+	def get_categorys():
+		db_connection= sqlite3.connect("database.sqlite3")
+		db_cursor = db_connection.cursor()
+		db_cursor.execute("SELECT category_name FROM Categories")
+		return db_cursor.fetchall()
+
+	options=get_categorys()
+
+	title = StringVar()
+	category = StringVar()
+	Window = Toplevel()
+	Window.attributes('-type', 'dialog')
+
+	# Entrada de categoria
+	Label(Window, text="Producto:").grid(row=0, column=0)
+	Entry(Window, textvariable=title).grid(
+		row=0, column=1, pady=10, padx=5)
+
+	# Create Dropdown menu
+	drop = OptionMenu( Window , category , *options )
+	drop.grid(row=0, column=2)
 
 mi_frame = Frame(root)
 mi_frame.config(width=300, height=400)
@@ -132,10 +166,10 @@ mi_frame.pack()
 button_agregar_clienta = Button(mi_frame, text="Agregar clienta", command=lambda: client_entry_window())
 button_agregar_clienta.grid(row=0, column=0)
 
-button_agregar_producto = Button(mi_frame, text="Agregar Producto", command=lambda: category_entry_window())
+button_agregar_producto = Button(mi_frame, text="Agregar Producto", command=lambda: product_entry_window())
 button_agregar_producto.grid(row=0, column=1)
 
-button_agregar_categorias = Button(mi_frame, text="Agregar categorias")
+button_agregar_categorias = Button(mi_frame, text="Agregar categorias", command= lambda: category_entry_window())
 button_agregar_categorias.grid(row=0, column=2)
 
 button_agregar_order = Button(mi_frame, text="Agregar order")
