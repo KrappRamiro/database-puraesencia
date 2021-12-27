@@ -1,6 +1,7 @@
 from database_functions import *
 from tkinter import *
 from tkinter import messagebox
+import functools
 root = Tk()
 root.attributes('-type', 'dialog')  # abrir en floating mode
 
@@ -123,19 +124,31 @@ def category_entry_window():
 		row=0, column=1, pady=10, padx=5)
 
 	button_cargar_datos = Button(Window, text="Cargar datos", command=lambda: create())
-	button_cargar_datos.grid(row=6, column=0, pady=5, padx=5)
+	button_cargar_datos.grid(row=1, column=0, pady=5, padx=5)
 
 def product_entry_window():
 	def create():
+		#Conectar con la base de datos
 		db_connection= sqlite3.connect("database.sqlite3")
 		db_cursor = db_connection.cursor()
 
-		print( "Recieved the following arguments:", title.get())
+		#Conseguir la categoria seleccionada
+		category_searched=category.get().strip('(),\'')
+		print("searching for the category",category_searched)
+
+		#Conseguir el ID de la categoria seleccionada
+		db_cursor.execute("SELECT category_id FROM Categories WHERE category_name = ?", (category_searched,))
+		category_id=db_cursor.fetchone()
+		category_id = functools.reduce(lambda sub, elem: sub * 10 + elem, category_id)
+		print("got", category_id)
+
+		#Insertar en la tabla de los productos
 		db_cursor.execute('''
-			INSERT INTO Categories
-			VALUES(?,?)''',(None,category, title.get())
+			INSERT INTO Products
+			VALUES(?,?,?)''',(None,category_id, title.get())
 		)
 		db_connection.commit()
+	
 	
 	def get_categorys():
 		db_connection= sqlite3.connect("database.sqlite3")
@@ -158,6 +171,11 @@ def product_entry_window():
 	# Create Dropdown menu
 	drop = OptionMenu( Window , category , *options )
 	drop.grid(row=0, column=2)
+
+	button_cargar_datos = Button(Window, text="Cargar datos", command=lambda: create())
+	button_cargar_datos.grid(row=1, column=0, pady=5, padx=5)
+
+
 
 mi_frame = Frame(root)
 mi_frame.config(width=300, height=400)
