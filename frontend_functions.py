@@ -1,5 +1,5 @@
 from database_functions import *
-from tkinter import *
+import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
 
@@ -16,7 +16,7 @@ def client_entry_window():
 		if email_validation(user_email.get()) is not True:
 			return
 
-		print("Value of check button:",user_gender.get())
+		print("Value of check tk.Button:",user_gender.get())
 		if user_gender.get()==1:
 			gender='M'
 			print("Recieved gender male")
@@ -39,44 +39,44 @@ def client_entry_window():
 		db_connection.commit()
 
 
-	user_id=IntVar()
-	user_firstname=StringVar()
-	user_lastname=StringVar()
-	user_email=StringVar()
-	user_gender=IntVar()
+	user_id=tk.IntVar()
+	user_firstname=tk.StringVar()
+	user_lastname=tk.StringVar()
+	user_email=tk.StringVar()
+	user_gender=tk.IntVar()
 
-	Window = Toplevel()
+	Window = tk.Toplevel()
 	Window.attributes('-type', 'dialog')
 
 	# ID
-	Label(Window, text="user_id").grid(row=0, column=0)
-	Entry(Window, textvariable=user_id).grid(
+	tk.Label(Window, text="user_id").grid(row=0, column=0)
+	tk.Entry(Window, textvariable=user_id).grid(
 		row=0, column=1, pady=10, padx=5)
 
 	# Nombre
-	Label(Window, text="Nombre").grid(row=1, column=0)
-	Entry(Window, textvariable=user_firstname).grid(
+	tk.Label(Window, text="Nombre").grid(row=1, column=0)
+	tk.Entry(Window, textvariable=user_firstname).grid(
 		row=1, column=1, pady=10, padx=5)
 
 	# Apellido
-	Label(Window, text="Apellido").grid(row=2, column=0)
-	Entry(Window, textvariable=user_lastname).grid(
+	tk.Label(Window, text="Apellido").grid(row=2, column=0)
+	tk.Entry(Window, textvariable=user_lastname).grid(
 		row=2, column=1, pady=10, padx=5)
 
 	# email
-	Label(Window, text="email").grid(row=3, column=0)
-	Entry(Window, textvariable=user_email).grid(
+	tk.Label(Window, text="email").grid(row=3, column=0)
+	tk.Entry(Window, textvariable=user_email).grid(
 		row=3, column=1, pady=10, padx=5)
 	
 	# genders
-	Label(Window, text="gender: ").grid(
+	tk.Label(Window, text="gender: ").grid(
 		row=4, column=0, pady=10, padx=5)
-	Radiobutton(Window, text="Masculino", variable=user_gender, value=1).grid(
+	tk.Radioutton(Window, text="Masculino", variable=user_gender, value=1).grid(
 		row=4, column=1, pady=5, padx=5)
-	Radiobutton(Window, text="Femenino", variable=user_gender, value=2).grid(
+	tk.Radioutton(Window, text="Femenino", variable=user_gender, value=2).grid(
 		row=5, column=1, pady=5, padx=5)
 
-	button_cargar_datos = Button(Window, text="Cargar datos", command=lambda: create())
+	button_cargar_datos = tk.Button(Window, text="Cargar datos", command=lambda: create())
 	button_cargar_datos.grid(row=6, column=0, pady=5, padx=5)
 
 def category_entry_window():
@@ -91,17 +91,17 @@ def category_entry_window():
 		)
 		db_connection.commit()
 
-	category_name= StringVar()
+	category_name= tk.StringVar()
 
-	Window = Toplevel()
+	Window = tk.Toplevel()
 	Window.attributes('-type', 'dialog')
 
 	# Entrada de categoria
-	Label(Window, text="Categoria").grid(row=0, column=0)
-	Entry(Window, textvariable=category_name).grid(
+	tk.Label(Window, text="Categoria").grid(row=0, column=0)
+	tk.Entry(Window, textvariable=category_name).grid(
 		row=0, column=1, pady=10, padx=5)
 
-	button_cargar_datos = Button(Window, text="Cargar datos", command=lambda: create())
+	button_cargar_datos = tk.Button(Window, text="Cargar datos", command=lambda: create())
 	button_cargar_datos.grid(row=1, column=0, pady=5, padx=5)
 
 def product_entry_window():
@@ -119,17 +119,17 @@ def product_entry_window():
 		db_connection.commit()
 	
 	#declaracion de variables
-	product_name = StringVar()
+	product_name = tk.StringVar()
 	# Cargar en una lista options todas las categorias
 	options=get_categories()
 
-	#Creacion de la nueva ventana toplevel
-	Window = Toplevel()
+	#Creacion de la nueva ventana tk.Toplevel
+	Window = tk.Toplevel()
 	Window.attributes('-type', 'dialog')
 
 	# Entrada de producto
-	Label(Window, text="Producto:").grid(row=0, column=0)
-	Entry(Window, textvariable=product_name).grid(
+	tk.Label(Window, text="Producto:").grid(row=0, column=0)
+	tk.Entry(Window, textvariable=product_name).grid(
 		row=0, column=1, pady=10, padx=5)
 
 	# Dropdown menu para las categorias
@@ -138,20 +138,20 @@ def product_entry_window():
 	dropdown.grid(row=0, column=2)
 
 	# Boton para la carga de datos
-	button_cargar_datos = Button(Window, text="Cargar datos", command=lambda: create())
+	button_cargar_datos = tk.Button(Window, text="Cargar datos", command=lambda: create())
 	button_cargar_datos.grid(row=1, column=0, pady=5, padx=5)
 
 def order_entry_window():
-	Window = Toplevel()
+	Window = tk.Toplevel()
 	Window.attributes('-type', 'dialog')
 
-	amount = IntVar()
+	amount = tk.IntVar()
 	categories=get_categories()
 	products=get_products()
 
 	# Entrada de cantidad
-	Label(Window, text="Cantidad:").grid(row=0, column=0)
-	Entry(Window, textvariable=amount).grid(
+	tk.Label(Window, text="Cantidad:").grid(row=0, column=0)
+	tk.Entry(Window, textvariable=amount).grid(
 		row=0, column=1, pady=10, padx=5)
 
 	# Dropdown menu para las categorias
@@ -168,6 +168,5 @@ def order_entry_window():
 	dropdown_products.grid(row=0, column=3)
 
 	# Textbox de los productos seleccionados
-	added_products=Text(Window, height=5, width=30).grid(row=1,column=0)
-	added_products.delete(1.0,"end")
-	added_products.insert(5.0, "holaaaaa")
+	added_products=tk.Text(Window, height=5, width=30)
+	added_products.delete()
