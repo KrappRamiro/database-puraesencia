@@ -37,7 +37,7 @@ def connect_to_database():
 			CREATE TABLE IF NOT EXISTS Products (
 				product_id				INTEGER	PRIMARY KEY AUTOINCREMENT,
 				category_id				INTEGER,
-				title 					TEXT NOT NULL UNIQUE,
+				product_name			TEXT NOT NULL UNIQUE,
 				FOREIGN KEY(category_id) REFERENCES Categories(category_id) ON DELETE CASCADE
 			)'''
 		)

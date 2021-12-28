@@ -1,9 +1,43 @@
 from database_functions import *
 from tkinter import *
 from tkinter import messagebox
+from tkinter import ttk
 import functools
 root = Tk()
 root.attributes('-type', 'dialog')  # abrir en floating mode
+#Conseguir todas las categorias y retornarlas como una lista
+def get_categories():
+	db_connection= sqlite3.connect("database.sqlite3")
+	db_cursor = db_connection.cursor()
+	db_cursor.execute("SELECT category_name FROM Categories")
+	return db_cursor.fetchall()
+
+def get_products():
+	db_connection= sqlite3.connect("database.sqlite3")
+	db_cursor = db_connection.cursor()
+	db_cursor.execute("SELECT product_name FROM Products")
+	return db_cursor.fetchall()
+
+def get_products_by_categorie(category_id):
+	db_connection= sqlite3.connect("database.sqlite3")
+	db_cursor = db_connection.cursor()
+	db_cursor.execute("SELECT product_name FROM Products WHERE category_id = ?",(category_id,))
+	return db_cursor.fetchall()
+
+def get_category_id(category_wanted):
+	db_connection= sqlite3.connect("database.sqlite3")
+	db_cursor = db_connection.cursor()
+	#Conseguir la categoria seleccionada
+	print(category_wanted.get())
+	category_searched=category_wanted.get().strip('(),\'')
+	print("searching for the category",category_searched)
+
+	#Conseguir el ID de la categoria seleccionada
+	db_cursor.execute("SELECT category_id FROM Categories WHERE category_name = ?", (category_searched,))
+	category_id=db_cursor.fetchone()
+	category_id = functools.reduce(lambda sub, elem: sub * 10 + elem, category_id)
+	print("found the category id: ", category_id)
+	return category_id
 
 def show_info():
 	messagebox.showinfo("Interfaz grafica base de datos", "Krapp Ramiro, version 1.0 2021")
@@ -128,54 +162,62 @@ def category_entry_window():
 
 def product_entry_window():
 	def create():
+		category_id=get_category_id(dropdown)
+
 		#Conectar con la base de datos
 		db_connection= sqlite3.connect("database.sqlite3")
 		db_cursor = db_connection.cursor()
-
-		#Conseguir la categoria seleccionada
-		category_searched=category.get().strip('(),\'')
-		print("searching for the category",category_searched)
-
-		#Conseguir el ID de la categoria seleccionada
-		db_cursor.execute("SELECT category_id FROM Categories WHERE category_name = ?", (category_searched,))
-		category_id=db_cursor.fetchone()
-		category_id = functools.reduce(lambda sub, elem: sub * 10 + elem, category_id)
-		print("got", category_id)
-
 		#Insertar en la tabla de los productos
 		db_cursor.execute('''
 			INSERT INTO Products
-			VALUES(?,?,?)''',(None,category_id, title.get())
+			VALUES(?,?,?)''',(None,category_id, product_name.get())
 		)
 		db_connection.commit()
 	
-	
-	def get_categorys():
-		db_connection= sqlite3.connect("database.sqlite3")
-		db_cursor = db_connection.cursor()
-		db_cursor.execute("SELECT category_name FROM Categories")
-		return db_cursor.fetchall()
+	#declaracion de variables
+	product_name = StringVar()
+	# Cargar en una lista options todas las categorias
+	options=get_categories()
 
-	options=get_categorys()
-
-	title = StringVar()
-	category = StringVar()
+	#Creacion de la nueva ventana toplevel
 	Window = Toplevel()
 	Window.attributes('-type', 'dialog')
 
-	# Entrada de categoria
+	# Entrada de producto
 	Label(Window, text="Producto:").grid(row=0, column=0)
-	Entry(Window, textvariable=title).grid(
+	Entry(Window, textvariable=product_name).grid(
 		row=0, column=1, pady=10, padx=5)
 
-	# Create Dropdown menu
-	drop = OptionMenu( Window , category , *options )
-	drop.grid(row=0, column=2)
+	# Dropdown menu para las categorias
+	dropdown = ttk.Combobox(Window , values=options)
+	dropdown.set("Elige una opcion...")
+	dropdown.grid(row=0, column=2)
 
+	# Boton para la carga de datos
 	button_cargar_datos = Button(Window, text="Cargar datos", command=lambda: create())
 	button_cargar_datos.grid(row=1, column=0, pady=5, padx=5)
 
+def order_entry_window():
+	Window = Toplevel()
+	Window.attributes('-type', 'dialog')
 
+	amount = IntVar()
+	categories=get_categories()
+	products=get_products_by_categorie()
+
+	# Entrada de cantidad
+	Label(Window, text="Cantidad:").grid(row=0, column=0)
+	Entry(Window, textvariable=amount).grid(
+		row=0, column=1, pady=10, padx=5)
+
+	# Dropdown menu para las categorias
+	dropdown_categories = ttk.Combobox(Window , values=categories)
+	dropdown_categories.set("Elige una opcion...")
+	dropdown_categories.grid(row=0, column=2)
+
+	dropdown_products = ttk.Combobox(Window , values=products)
+	dropdown_products.set("Elige una opcion...")
+	dropdown_products.grid(row=0, column=3)
 
 mi_frame = Frame(root)
 mi_frame.config(width=300, height=400)
@@ -190,7 +232,7 @@ button_agregar_producto.grid(row=0, column=1)
 button_agregar_categorias = Button(mi_frame, text="Agregar categorias", command= lambda: category_entry_window())
 button_agregar_categorias.grid(row=0, column=2)
 
-button_agregar_order = Button(mi_frame, text="Agregar order")
+button_agregar_order = Button(mi_frame, text="Agregar order", command= lambda: order_entry_window())
 button_agregar_order.grid(row=0, column=3)
 connect_to_database()
 root.mainloop()
