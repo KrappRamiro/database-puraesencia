@@ -1,7 +1,6 @@
 from database_functions import *
 import tkinter as tk
-from tkinter import messagebox
-from tkinter import ttk
+from tkinter import messagebox, ttk
 
 def show_info():
 	messagebox.showinfo("Interfaz grafica base de datos", "Krapp Ramiro, version 1.0 2021")
@@ -142,6 +141,16 @@ def product_entry_window():
 	button_cargar_datos.grid(row=1, column=0, pady=5, padx=5)
 
 def order_entry_window():
+	def agregar_producto(added_products):
+		selected_products=added_products.get(1.0, "end")
+		selected_products= str(amount.get()) + " x " + dropdown_products.get()
+		print(selected_products)
+		contenido_anterior= added_products.get(1.0, "end")
+		added_products.delete(1.0, "end")
+		added_products.insert(1.0, contenido_anterior + selected_products)
+
+
+		
 	Window = tk.Toplevel()
 	Window.attributes('-type', 'dialog')
 
@@ -169,4 +178,10 @@ def order_entry_window():
 
 	# Textbox de los productos seleccionados
 	added_products=tk.Text(Window, height=5, width=30)
-	added_products.delete()
+	added_products.grid(row=1, column=0)
+
+	# Button de Add
+	boton = tk.Button(Window, text="Add", command=lambda:agregar_producto(added_products))
+	boton.grid(row=2, column=0)
+
+#button_agregar_order = tk.Button(mi_frame, text="Agregar order", command= lambda: order_entry_window())

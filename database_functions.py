@@ -1,6 +1,5 @@
 import sqlite3
 from tkinter import messagebox
-import functools
 
 def connect_to_database():
 	try:
