@@ -1,51 +1,59 @@
 from database_functions import *
 import tkinter as tk
 from tkinter import messagebox, ttk
+import logging
 
 def show_info():
-	messagebox.showinfo("Interfaz grafica base de datos", "Krapp Ramiro, version 1.0 2021")
+	messagebox.showinfo("Interfaz grafica base de datos",
+						"Krapp Ramiro, version 1.0 2021")
 
 def show_license():
 	messagebox.showwarning("Licencia", "Producto bajo licencia GNU GPL v2.0")
 
 def client_entry_window():
-	def create():
-		db_connection= sqlite3.connect("database.sqlite3")
+	''' Esta funcion crea una ventana para que se ingrese informacion sobre los clientes,
+	se piden: - Nombre - Apellido - email - genero'''
+	def create(firstname, lastname, email, gender):
+		''' Esta funcion ingresa nombre, apellido, email y genero dentro de la base de datos,
+		recibe como parametros los mismos'''
+		# Conexion con base de datos
+		db_connection = sqlite3.connect("database.sqlite3")
 		db_cursor = db_connection.cursor()
-		if email_validation(user_email.get()) is not True:
+		# Validacion de email
+		if email_validation(email) is not True:
 			return
-
-		print("Value of check tk.Button:",user_gender.get())
-		if user_gender.get()==1:
-			gender='M'
-			print("Recieved gender male")
-		elif user_gender.get()==2:
-			gender='F'
-			print("Recieved gender female")
+		# Asignacion de genero
+		if gender == 1: gender = 'M'
+		elif gender == 2: gender = 'F'
 		else:
-			print("No recieved gender")
-
-		print(
-			"Recieved the following arguments:\nName:", user_firstname.get(), 
-			"\nSurname:", user_lastname.get(), 
-			"\nEmail:", user_email.get(),
-			"\nGender:", gender
+			logging.error("El genero introducido es invalido")
+			return
+		# Log de datos introducidos
+		logging.info(
+			f'''Client creation --- Recieved the following arguments:
+			Name: {firstname}
+			Surname: {lastname}
+			Email: {email}
+			Gender: {gender}'''
 		)
-		db_cursor.execute('''
-			INSERT INTO Customers
-			VALUES(?,?,?,?,?,?,?)''',(None,user_firstname.get(),user_lastname.get(),user_email.get(), gender,None, None)
+		# Introduccion de datos en la base de datos
+		db_cursor.execute(
+			'''INSERT INTO Customers
+			VALUES(?,?,?,?,?,?,?)''',
+			(None, firstname, lastname, email, gender, None, None)
 		)
+		logging.info("Succesfully created client")
 		db_connection.commit()
 
-
-	user_id=tk.IntVar()
-	user_firstname=tk.StringVar()
-	user_lastname=tk.StringVar()
-	user_email=tk.StringVar()
-	user_gender=tk.IntVar()
+	user_id = tk.IntVar()
+	user_firstname = tk.StringVar()
+	user_lastname = tk.StringVar()
+	user_email = tk.StringVar()
+	user_gender = tk.IntVar()
 
 	Window = tk.Toplevel()
 	Window.attributes('-type', 'dialog')
+	Window.title("Agregar clienta")
 
 	# ID
 	tk.Label(Window, text="user_id").grid(row=0, column=0)
@@ -66,97 +74,98 @@ def client_entry_window():
 	tk.Label(Window, text="email").grid(row=3, column=0)
 	tk.Entry(Window, textvariable=user_email).grid(
 		row=3, column=1, pady=10, padx=5)
-	
+
 	# genders
 	tk.Label(Window, text="gender: ").grid(
 		row=4, column=0, pady=10, padx=5)
-	tk.Radioutton(Window, text="Masculino", variable=user_gender, value=1).grid(
+	tk.Radiobutton(Window, text="Masculino", variable=user_gender, value=1).grid(
 		row=4, column=1, pady=5, padx=5)
-	tk.Radioutton(Window, text="Femenino", variable=user_gender, value=2).grid(
+	tk.Radiobutton(Window, text="Femenino", variable=user_gender, value=2).grid(
 		row=5, column=1, pady=5, padx=5)
 
-	button_cargar_datos = tk.Button(Window, text="Cargar datos", command=lambda: create())
-	button_cargar_datos.grid(row=6, column=0, pady=5, padx=5)
+	tk.Button(
+		Window, text="Cargar datos", command=lambda: create(user_firstname.get(), user_lastname.get(), user_email.get(), user_gender.get())) .grid(row=6, column=0, pady=5, padx=5)
 
 def category_entry_window():
 	def create():
-		db_connection= sqlite3.connect("database.sqlite3")
+		db_connection = sqlite3.connect("database.sqlite3")
 		db_cursor = db_connection.cursor()
 
-		print( "Recieved the following arguments:", category_name.get())
-		db_cursor.execute('''
-			INSERT INTO Categories
-			VALUES(?,?)''',(None,category_name.get())
+		logging.info("Recieved the following arguments:", category_name.get())
+		db_cursor.execute(
+			'''INSERT INTO Categories
+			VALUES(?,?)''',
+			(None, category_name.get())
 		)
 		db_connection.commit()
 
-	category_name= tk.StringVar()
+	category_name = tk.StringVar()
 
 	Window = tk.Toplevel()
 	Window.attributes('-type', 'dialog')
+	Window.title("Agregar categoría")
 
 	# Entrada de categoria
 	tk.Label(Window, text="Categoria").grid(row=0, column=0)
 	tk.Entry(Window, textvariable=category_name).grid(
 		row=0, column=1, pady=10, padx=5)
 
-	button_cargar_datos = tk.Button(Window, text="Cargar datos", command=lambda: create())
-	button_cargar_datos.grid(row=1, column=0, pady=5, padx=5)
+	tk.Button( Window, text="Cargar datos", command=lambda: create()).grid(row=1, column=0, pady=5, padx=5)
 
 def product_entry_window():
 	def create():
-		category_id=get_category_id(dropdown.get())
+		category_id = get_category_id(dropdown.get())
 
-		#Conectar con la base de datos
-		db_connection= sqlite3.connect("database.sqlite3")
+		# Conectar con la base de datos
+		db_connection = sqlite3.connect("database.sqlite3")
 		db_cursor = db_connection.cursor()
-		#Insertar en la tabla de los productos
-		db_cursor.execute('''
-			INSERT INTO Products
-			VALUES(?,?,?)''',(None,category_id, product_name.get())
+		# Insertar en la tabla de los productos
+		db_cursor.execute(
+			'''INSERT INTO Products
+			VALUES(?,?,?)''',
+			(None, category_id, product_name.get())
 		)
 		db_connection.commit()
-	
-	#declaracion de variables
-	product_name = tk.StringVar()
-	# Cargar en una lista options todas las categorias
-	options=get_categories()
-
-	#Creacion de la nueva ventana tk.Toplevel
+	# Creacion de la nueva ventana tk.Toplevel
 	Window = tk.Toplevel()
 	Window.attributes('-type', 'dialog')
-
+	Window.title("Agregar producto")
+	# declaracion de variables
+	product_name = tk.StringVar()
+	options = get_categories()
 	# Entrada de producto
 	tk.Label(Window, text="Producto:").grid(row=0, column=0)
 	tk.Entry(Window, textvariable=product_name).grid(
 		row=0, column=1, pady=10, padx=5)
 
 	# Dropdown menu para las categorias
-	dropdown = ttk.Combobox(Window , values=options)
+	dropdown = ttk.Combobox(Window, values=options)
 	dropdown.set("Elige una opcion...")
 	dropdown.grid(row=0, column=2)
 
 	# Boton para la carga de datos
-	button_cargar_datos = tk.Button(Window, text="Cargar datos", command=lambda: create())
+	button_cargar_datos = tk.Button(
+		Window, text="Cargar datos", command=lambda: create())
 	button_cargar_datos.grid(row=1, column=0, pady=5, padx=5)
 
 def order_entry_window():
-	def agregar_producto(added_products):
-		selected_products=added_products.get(1.0, "end")
-		selected_products= str(amount.get()) + " x " + dropdown_products.get()
-		print(selected_products)
-		contenido_anterior= added_products.get(1.0, "end")
-		added_products.delete(1.0, "end")
-		added_products.insert(1.0, contenido_anterior + selected_products)
+	def agregar_producto():
+		# 1 - consigo que productos se quiere agregar y que cantidad
+		selected_products = str(amount.get()) + " x " + dropdown_products.get()
+		logging.info(f"Agregando {amount.get()} {dropdown_products.get()}/s")
+		# 2 - guardo en contenido_anterior lo que habia antes en la textbox, y limpio la misma
+		contenido_anterior = textbox_added_products.get(1.0, "end")
+		textbox_added_products.delete(1.0, "end")
+		# 3 - inserto en la textbox el contendio que habia antes + los productos que quiero agregar
+		textbox_added_products.insert(1.0, contenido_anterior + selected_products)
 
-
-		
 	Window = tk.Toplevel()
 	Window.attributes('-type', 'dialog')
+	Window.title("Agregar orden de compra")
 
 	amount = tk.IntVar()
-	categories=get_categories()
-	products=get_products()
+	categories = get_categories()
+	products = get_products()
 
 	# Entrada de cantidad
 	tk.Label(Window, text="Cantidad:").grid(row=0, column=0)
@@ -164,7 +173,7 @@ def order_entry_window():
 		row=0, column=1, pady=10, padx=5)
 
 	# Dropdown menu para las categorias
-	dropdown_categories = ttk.Combobox(Window , values=categories)
+	dropdown_categories = ttk.Combobox(Window, values=categories)
 	dropdown_categories.set("Elige una opcion...")
 	dropdown_categories.grid(row=0, column=2)
 
@@ -172,16 +181,15 @@ def order_entry_window():
 	# TODO: Deberia hacer que despues de seleccionar la categoria, se active
 	# un evento en el cual actualice el valor de products, lo cual
 	# actualice lo que hay en el dropdown menu.
-	dropdown_products = ttk.Combobox(Window , values=products)
+	dropdown_products = ttk.Combobox(Window, values=products)
 	dropdown_products.set("Elige una opcion...")
 	dropdown_products.grid(row=0, column=3)
 
 	# Textbox de los productos seleccionados
-	added_products=tk.Text(Window, height=5, width=30)
-	added_products.grid(row=1, column=0)
+	textbox_added_products = tk.Text(Window, height=5, width=30)
+	textbox_added_products.grid(row=1, column=0)
 
 	# Button de Add
-	boton = tk.Button(Window, text="Add", command=lambda:agregar_producto(added_products))
+	boton = tk.Button(Window, text="Add", command=lambda: agregar_producto())
 	boton.grid(row=2, column=0)
 
-#button_agregar_order = tk.Button(mi_frame, text="Agregar order", command= lambda: order_entry_window())
