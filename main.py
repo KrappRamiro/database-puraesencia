@@ -8,6 +8,10 @@ root = tk.Tk()
 root.attributes('-type', 'dialog')  # abrir en floating mode
 root.title("Base de datos Pura Esencia")
 logging.basicConfig(encoding='utf-8',format='%(levelname)s: %(message)s', level=logging.DEBUG)
+
+db_connection = sqlite3.connect("database.sqlite3")
+db_cursor = db_connection.cursor()
+
 def exit_program():
 	'''Abre un messagebox preguntando si se desea salir de la aplicacion'''	
 	valor = messagebox.askquestion("Salir", "¿Deseas salir de la aplicacion?")

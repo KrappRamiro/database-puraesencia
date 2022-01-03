@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 import logging
 
+
 def show_info():
 	messagebox.showinfo("Interfaz grafica base de datos",
 						"Krapp Ramiro, version 1.0 2021")
@@ -17,8 +18,6 @@ def client_entry_window():
 		''' Esta funcion ingresa nombre, apellido, email y genero dentro de la base de datos,
 		recibe como parametros los mismos'''
 		# Conexion con base de datos
-		db_connection = sqlite3.connect("database.sqlite3")
-		db_cursor = db_connection.cursor()
 		# Validacion de email
 		if email_validation(email) is not True:
 			return
@@ -88,9 +87,6 @@ def client_entry_window():
 
 def category_entry_window():
 	def create():
-		db_connection = sqlite3.connect("database.sqlite3")
-		db_cursor = db_connection.cursor()
-
 		logging.info("Recieved the following arguments:", category_name.get())
 		db_cursor.execute(
 			'''INSERT INTO Categories
@@ -117,8 +113,6 @@ def product_entry_window():
 		category_id = get_category_id(dropdown.get())
 
 		# Conectar con la base de datos
-		db_connection = sqlite3.connect("database.sqlite3")
-		db_cursor = db_connection.cursor()
 		# Insertar en la tabla de los productos
 		db_cursor.execute(
 			'''INSERT INTO Products
@@ -249,8 +243,6 @@ def medio_de_pago_entry_window():
 	def create(medio_de_pago):
 
 		# Conectar con la base de datos
-		db_connection = sqlite3.connect("database.sqlite3")
-		db_cursor = db_connection.cursor()
 		# Insertar en la tabla de los productos
 		db_cursor.execute(
 			'''INSERT INTO Medios_pago
