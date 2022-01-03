@@ -149,6 +149,7 @@ def product_entry_window():
 	button_cargar_datos.grid(row=1, column=0, pady=5, padx=5)
 
 def order_entry_window():
+	# TODO falta el agregado a la base de datos
 	lista_clientas=get_clients()
 	# Esto estaba para printear que clientas habia
 	#for i in range(len(lista_clientas)):
@@ -193,6 +194,7 @@ def order_entry_window():
 	products = get_products()
 	price = tk.IntVar()
 	total_displayed = tk.IntVar()
+	medios_de_pago = get_medios_de_pago()
 
 	# Entrada de cantidad
 	tk.Label(Window, text="Cantidad").grid(row=0, column=0, padx=5, pady=5)
@@ -209,6 +211,7 @@ def order_entry_window():
 	# TODO: Deberia hacer que despues de seleccionar la categoria, se active
 	# un evento en el cual actualice el valor de products, lo cual
 	# actualice lo que hay en el dropdown menu.
+	##  Por lo tanto, no tiene utilidad por el momento :(
 	tk.Label(Window, text="Producto").grid(row=0, column=2, padx=5, pady=5)
 	dropdown_products = ttk.Combobox(Window, values=products)
 	dropdown_products.set("Elige una opcion...")
@@ -227,11 +230,42 @@ def order_entry_window():
 	tk.Entry(Window, textvariable=total_displayed).grid(row=2, column=3)
 
 	# Lista de clientas
+	tk.Label(Window, text="Clienta").grid(row=0, column=4)
 	dropdown_clients = ttk.Combobox(Window, values=lista_clientas)
 	dropdown_clients.set("Elige una clienta...")
 	dropdown_clients.grid(row=1, column=4)
+
+	# Medio de pago
+	tk.Label(Window, text="Medio de pago").grid(row=0, column=5)
+	dropdown_medios_pago = ttk.Combobox(Window, values=medios_de_pago)
+	dropdown_medios_pago.set("Elige un medio de pago...")
+	dropdown_medios_pago.grid(row=1, column=5)
 
 	# Button de Add
 	boton = tk.Button(Window, text="Add", command=lambda: agregar_producto(amount.get(), dropdown_products.get(), price.get()))
 	boton.grid(row=3, column=0)
 
+def medio_de_pago_entry_window():
+	def create(medio_de_pago):
+
+		# Conectar con la base de datos
+		db_connection = sqlite3.connect("database.sqlite3")
+		db_cursor = db_connection.cursor()
+		# Insertar en la tabla de los productos
+		db_cursor.execute(
+			'''INSERT INTO Medios_pago
+			VALUES(?,?)''',
+			(None, medio_de_pago)
+		)
+		db_connection.commit()
+		logging.info(f"Adding medio de pago with name {medio_de_pago}")
+
+	Window = tk.Toplevel()
+	Window.attributes('-type', 'dialog')
+	Window.title("Agregar medio de pago")
+
+	medio_de_pago = tk.StringVar()
+
+	tk.Label(Window, text="Ingrese el medio de pago").grid(row=0, column=0, pady=5, padx=5)
+	tk.Entry(Window, textvariable=medio_de_pago).grid(row=1, column=0, padx=5, pady=5)
+	tk.Button(Window, text="Añadir", command= lambda: create(medio_de_pago.get())).grid(row=2, column=0)

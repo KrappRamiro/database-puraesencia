@@ -21,13 +21,20 @@ def connect_to_database():
 			)'''
 		)
 		db_cursor.execute(
+			''' CREATE TABLE IF NOT EXISTS Medios_pago (
+				medio_pago_id			INTEGER PRIMARY KEY AUTOINCREMENT,
+				medio_pago_name			TEXT NOT NULL
+			)'''
+		)
+		db_cursor.execute(
 			''' CREATE TABLE IF NOT EXISTS Orders (
 				order_id				INTEGER PRIMARY KEY AUTOINCREMENT,
 				orderdate				TEXT 	NOT NULL,
 				customer_id				INTEGER	NOT NULL,
 				total_amount			FLOAT 	NOT NULL,
-				medio_pago				TEXT,
-				FOREIGN KEY(customer_id) REFERENCES Customers(customer_id) ON DELETE CASCADE
+				medio_pago_id			INTEGER NOT NULL,
+				FOREIGN KEY(customer_id) REFERENCES Customers(customer_id) ON DELETE CASCADE,
+				FOREIGN KEY(medio_pago_id) REFERENCES Medios_pago(medio_pago_id) ON DELETE CASCADE
 			)'''
 		)
 		db_cursor.execute(
@@ -91,6 +98,12 @@ def get_clients():
 	db_cursor.execute("SELECT first_name, last_name FROM Customers")
 	return db_cursor.fetchall()
 
+def get_medios_de_pago():
+	'''Retorna una lista con el nombre de todos los medios de pago'''
+	db_connection = sqlite3.connect("database.sqlite3")
+	db_cursor = db_connection.cursor()
+	db_cursor.execute("SELECT medio_pago_name FROM Medios_pago")
+	return db_cursor.fetchall()
 
 def get_category_id(category_wanted):
 	'''retorna el id de la categoria pasada por parametro'''

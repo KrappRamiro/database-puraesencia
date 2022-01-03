@@ -36,6 +36,10 @@ button_agregar_categorias.grid(row=0, column=2, padx=5, pady=5)
 button_agregar_order = tk.Button(mi_frame, text="Agregar order", command= lambda: order_entry_window())
 button_agregar_order.grid(row=0, column=3, padx=5, pady=5)
 
+#Boton para agregar medios de pago
+button_agregar_medios_pago = tk.Button(mi_frame, text="Agregar medio de pago", command= lambda: medio_de_pago_entry_window())
+button_agregar_medios_pago.grid(row=0, column=4, padx=5, pady=5)
+
 # Crea la base de datos si no existe
 connect_to_database()
 root.mainloop()
