@@ -84,6 +84,13 @@ def get_products_by_categorie(category_id):
 		"SELECT product_name FROM Products WHERE category_id = ?", (category_id,))
 	return db_cursor.fetchall()
 
+def get_clients():
+	'''Retorna una lista con el nombre de todos los clientes'''
+	db_connection = sqlite3.connect("database.sqlite3")
+	db_cursor = db_connection.cursor()
+	db_cursor.execute("SELECT first_name, last_name FROM Customers")
+	return db_cursor.fetchall()
+
 
 def get_category_id(category_wanted):
 	'''retorna el id de la categoria pasada por parametro'''
