@@ -149,12 +149,25 @@ def product_entry_window():
 	button_cargar_datos.grid(row=1, column=0, pady=5, padx=5)
 
 def order_entry_window():
+	# TODO falta el agregado a la base de datos
+	lista_clientas=get_clients()
+	# Esto estaba para printear que clientas habia
+	#for i in range(len(lista_clientas)):
+	#	print (lista_clientas[i][0] + " " + lista_clientas[i][1])
+	
 	lista_productos = []
 	class Producto():
 		def __init__(self, amount, product, price):
 			self.amount = amount
 			self.product = product
 			self.price = price
+	
+	def actualizar_total():
+		total = 0
+		for producto in lista_productos:
+			total += producto.price * producto.amount
+		logging.info(f"el total es {total}")
+		total_displayed.set(total)
 
 	def agregar_producto(amount, product, price):
 		logging.info(f"Adding {amount} {product}'s with a price of {price} each one")
@@ -169,7 +182,8 @@ def order_entry_window():
 		textbox_added_products.delete(1.0, "end")
 
 		# 3 - inserto en la textbox el contendio que habia antes + los productos que quiero agregar
-		textbox_added_products.insert(1.0, contenido_anterior + selected_products)	
+		textbox_added_products.insert(1.0, contenido_anterior + selected_products)
+		actualizar_total()
 
 	Window = tk.Toplevel()
 	Window.attributes('-type', 'dialog')
@@ -179,6 +193,8 @@ def order_entry_window():
 	categories = get_categories()
 	products = get_products()
 	price = tk.IntVar()
+	total_displayed = tk.IntVar()
+	medios_de_pago = get_medios_de_pago()
 
 	# Entrada de cantidad
 	tk.Label(Window, text="Cantidad").grid(row=0, column=0, padx=5, pady=5)
@@ -195,6 +211,7 @@ def order_entry_window():
 	# TODO: Deberia hacer que despues de seleccionar la categoria, se active
 	# un evento en el cual actualice el valor de products, lo cual
 	# actualice lo que hay en el dropdown menu.
+	##  Por lo tanto, no tiene utilidad por el momento :(
 	tk.Label(Window, text="Producto").grid(row=0, column=2, padx=5, pady=5)
 	dropdown_products = ttk.Combobox(Window, values=products)
 	dropdown_products.set("Elige una opcion...")
@@ -202,15 +219,53 @@ def order_entry_window():
 
 	# Entrada de costo de producto
 	tk.Label(Window, text="Precio").grid(row=0, column=3, padx=5, pady=5)
-	tk.Entry(Window, textvariable=price).grid(
-		row=1, column=3, pady=10, padx=5
-	)
+	tk.Entry(Window, textvariable=price).grid( row=1, column=3, pady=10, padx=5)
 
 	# Textbox de los productos seleccionados
-	textbox_added_products = tk.Text(Window, height=5, width=50)
-	textbox_added_products.grid(row=2, column=0,columnspan=3)
+	textbox_added_products = tk.Text(Window, height=5, width=40)
+	textbox_added_products.grid(row=2, column=0,columnspan=2)
+
+	# Precio total
+	tk.Label(Window, text="Total: $").grid(row=2, column=2)
+	tk.Entry(Window, textvariable=total_displayed).grid(row=2, column=3)
+
+	# Lista de clientas
+	tk.Label(Window, text="Clienta").grid(row=0, column=4)
+	dropdown_clients = ttk.Combobox(Window, values=lista_clientas)
+	dropdown_clients.set("Elige una clienta...")
+	dropdown_clients.grid(row=1, column=4)
+
+	# Medio de pago
+	tk.Label(Window, text="Medio de pago").grid(row=0, column=5)
+	dropdown_medios_pago = ttk.Combobox(Window, values=medios_de_pago)
+	dropdown_medios_pago.set("Elige un medio de pago...")
+	dropdown_medios_pago.grid(row=1, column=5)
 
 	# Button de Add
 	boton = tk.Button(Window, text="Add", command=lambda: agregar_producto(amount.get(), dropdown_products.get(), price.get()))
 	boton.grid(row=3, column=0)
 
+def medio_de_pago_entry_window():
+	def create(medio_de_pago):
+
+		# Conectar con la base de datos
+		db_connection = sqlite3.connect("database.sqlite3")
+		db_cursor = db_connection.cursor()
+		# Insertar en la tabla de los productos
+		db_cursor.execute(
+			'''INSERT INTO Medios_pago
+			VALUES(?,?)''',
+			(None, medio_de_pago)
+		)
+		db_connection.commit()
+		logging.info(f"Adding medio de pago with name {medio_de_pago}")
+
+	Window = tk.Toplevel()
+	Window.attributes('-type', 'dialog')
+	Window.title("Agregar medio de pago")
+
+	medio_de_pago = tk.StringVar()
+
+	tk.Label(Window, text="Ingrese el medio de pago").grid(row=0, column=0, pady=5, padx=5)
+	tk.Entry(Window, textvariable=medio_de_pago).grid(row=1, column=0, padx=5, pady=5)
+	tk.Button(Window, text="Añadir", command= lambda: create(medio_de_pago.get())).grid(row=2, column=0)
