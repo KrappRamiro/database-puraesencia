@@ -149,15 +149,27 @@ def product_entry_window():
 	button_cargar_datos.grid(row=1, column=0, pady=5, padx=5)
 
 def order_entry_window():
-	def agregar_producto():
+	lista_productos = []
+	class Producto():
+		def __init__(self, amount, product, price):
+			self.amount = amount
+			self.product = product
+			self.price = price
+
+	def agregar_producto(amount, product, price):
+		logging.info(f"Adding {amount} {product}'s with a price of {price} each one")
+		lista_productos.append(Producto(amount, product, price))
+		
+		# Parte de la textbox
 		# 1 - consigo que productos se quiere agregar y que cantidad
-		selected_products = str(amount.get()) + " x " + dropdown_products.get()
-		logging.info(f"Agregando {amount.get()} {dropdown_products.get()}/s")
+		selected_products = str(amount) + " x " + dropdown_products.get() + " c/u $" + str(price)
+
 		# 2 - guardo en contenido_anterior lo que habia antes en la textbox, y limpio la misma
 		contenido_anterior = textbox_added_products.get(1.0, "end")
 		textbox_added_products.delete(1.0, "end")
+
 		# 3 - inserto en la textbox el contendio que habia antes + los productos que quiero agregar
-		textbox_added_products.insert(1.0, contenido_anterior + selected_products)
+		textbox_added_products.insert(1.0, contenido_anterior + selected_products)	
 
 	Window = tk.Toplevel()
 	Window.attributes('-type', 'dialog')
@@ -166,30 +178,39 @@ def order_entry_window():
 	amount = tk.IntVar()
 	categories = get_categories()
 	products = get_products()
+	price = tk.IntVar()
 
 	# Entrada de cantidad
-	tk.Label(Window, text="Cantidad:").grid(row=0, column=0)
+	tk.Label(Window, text="Cantidad").grid(row=0, column=0, padx=5, pady=5)
 	tk.Entry(Window, textvariable=amount).grid(
-		row=0, column=1, pady=10, padx=5)
+		row=1, column=0, pady=10, padx=5)
 
 	# Dropdown menu para las categorias
+	tk.Label(Window, text="Categoria").grid(row=0, column=1, padx=5, pady=5)
 	dropdown_categories = ttk.Combobox(Window, values=categories)
 	dropdown_categories.set("Elige una opcion...")
-	dropdown_categories.grid(row=0, column=2)
+	dropdown_categories.grid(row=1, column=1)
 
 	# Dropdown para los productos
 	# TODO: Deberia hacer que despues de seleccionar la categoria, se active
 	# un evento en el cual actualice el valor de products, lo cual
 	# actualice lo que hay en el dropdown menu.
+	tk.Label(Window, text="Producto").grid(row=0, column=2, padx=5, pady=5)
 	dropdown_products = ttk.Combobox(Window, values=products)
 	dropdown_products.set("Elige una opcion...")
-	dropdown_products.grid(row=0, column=3)
+	dropdown_products.grid(row=1, column=2)
+
+	# Entrada de costo de producto
+	tk.Label(Window, text="Precio").grid(row=0, column=3, padx=5, pady=5)
+	tk.Entry(Window, textvariable=price).grid(
+		row=1, column=3, pady=10, padx=5
+	)
 
 	# Textbox de los productos seleccionados
-	textbox_added_products = tk.Text(Window, height=5, width=30)
-	textbox_added_products.grid(row=1, column=0)
+	textbox_added_products = tk.Text(Window, height=5, width=50)
+	textbox_added_products.grid(row=2, column=0,columnspan=3)
 
 	# Button de Add
-	boton = tk.Button(Window, text="Add", command=lambda: agregar_producto())
-	boton.grid(row=2, column=0)
+	boton = tk.Button(Window, text="Add", command=lambda: agregar_producto(amount.get(), dropdown_products.get(), price.get()))
+	boton.grid(row=3, column=0)
 
