@@ -59,6 +59,7 @@ def connect_to_database():
 				order_id				INTEGER,
 				product_id				INTEGER,
 				quantity				INTEGER,
+				price					INTEGER,
 				FOREIGN KEY(order_id) REFERENCES Orders(order_id) ON DELETE CASCADE,
 				FOREIGN KEY(product_id) REFERENCES Products(product_id) ON DELETE CASCADE
 			)'''
@@ -114,8 +115,7 @@ def get_medio_de_pago_id_by_name(medio_pago):
 def get_category_id(category_wanted):
 	'''retorna el id de la categoria pasada por parametro'''
 
-	category_wanted = category_wanted.strip('(),\'\{\}')
-	logging.info("Searching for", category_wanted)
+	logging.info(f"Searching for the id of the category {category_wanted}")
 	# Conseguir el ID de la categoria seleccionada
 	db_cursor.execute(
 		"SELECT category_id FROM Categories WHERE category_name = ?", (category_wanted,))
