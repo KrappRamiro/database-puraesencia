@@ -9,7 +9,6 @@ def connect_to_database():
 	try:
 		logging.info("Starting connection with database")
 		#messagebox.showinfo("Informacion", "Conectando a base de datos")
-
 		db_cursor.execute(
 			''' CREATE TABLE IF NOT EXISTS Customers (
 				customer_id 			INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -24,7 +23,7 @@ def connect_to_database():
 		db_cursor.execute(
 			''' CREATE TABLE IF NOT EXISTS Medios_pago (
 				medio_pago_id			INTEGER PRIMARY KEY AUTOINCREMENT,
-				medio_pago_name			TEXT NOT NULL
+				medio_pago_name			TEXT NOT NULL UNIQUE
 			)'''
 		)
 		db_cursor.execute(
@@ -34,8 +33,10 @@ def connect_to_database():
 				customer_id				INTEGER	NOT NULL,
 				total_amount			FLOAT 	NOT NULL,
 				medio_pago_id			INTEGER NOT NULL,
-				FOREIGN KEY(customer_id) REFERENCES Customers(customer_id) ON DELETE CASCADE,
-				FOREIGN KEY(medio_pago_id) REFERENCES Medios_pago(medio_pago_id) ON DELETE CASCADE
+				profesional_id			INTEGER NOT NULL,
+				FOREIGN KEY(profesional_id) REFERENCES Profesionales(profesional_id)	ON DELETE CASCADE
+				FOREIGN KEY(customer_id) 	REFERENCES Customers(customer_id)			ON DELETE CASCADE,
+				FOREIGN KEY(medio_pago_id) 	REFERENCES Medios_pago(medio_pago_id) 		ON DELETE CASCADE
 			)'''
 		)
 		db_cursor.execute(
@@ -62,6 +63,14 @@ def connect_to_database():
 				price					INTEGER,
 				FOREIGN KEY(order_id) REFERENCES Orders(order_id) ON DELETE CASCADE,
 				FOREIGN KEY(product_id) REFERENCES Products(product_id) ON DELETE CASCADE
+			)'''
+		)
+		db_cursor.execute(
+			''' CREATE TABLE IF NOT EXISTS Profesionales (
+				profesional_id			INTEGER PRIMARY KEY AUTOINCREMENT,
+				first_name				TEXT NOT NULL,
+				last_name				TEXT NOT NULL,
+				especializacion			TEXT
 			)'''
 		)
 	except:
@@ -145,6 +154,12 @@ def get_customer_id_by_name(firstname, lastname):
 	else:
 		logging.warning("customer not found")
 		return None
+
+def get_profesionales():
+	'''Retorna la lista de profesionales'''
+	db_cursor.execute("SELECT first_name, last_name FROM Profesionales")
+	return db_cursor.fetchall()
+
 
 def email_validation(x):
 	a = 0
