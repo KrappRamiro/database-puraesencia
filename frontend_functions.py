@@ -2,6 +2,8 @@ from database_functions import *
 import tkinter as tk
 from tkinter import messagebox, ttk
 import logging
+from datetime import date, datetime
+
 
 def show_info():
 	messagebox.showinfo("Interfaz grafica base de datos",
@@ -17,8 +19,6 @@ def client_entry_window():
 		''' Esta funcion ingresa nombre, apellido, email y genero dentro de la base de datos,
 		recibe como parametros los mismos'''
 		# Conexion con base de datos
-		db_connection = sqlite3.connect("database.sqlite3")
-		db_cursor = db_connection.cursor()
 		# Validacion de email
 		if email_validation(email) is not True:
 			return
@@ -87,17 +87,15 @@ def client_entry_window():
 		Window, text="Cargar datos", command=lambda: create(user_firstname.get(), user_lastname.get(), user_email.get(), user_gender.get())) .grid(row=6, column=0, pady=5, padx=5)
 
 def category_entry_window():
-	def create():
-		db_connection = sqlite3.connect("database.sqlite3")
-		db_cursor = db_connection.cursor()
-
-		logging.info("Recieved the following arguments:", category_name.get())
+	def create(category_name):
+		logging.info(f"Recieved the following arguments: {category_name}")
 		db_cursor.execute(
 			'''INSERT INTO Categories
 			VALUES(?,?)''',
-			(None, category_name.get())
+			(None, category_name)
 		)
 		db_connection.commit()
+
 
 	category_name = tk.StringVar()
 
@@ -110,22 +108,20 @@ def category_entry_window():
 	tk.Entry(Window, textvariable=category_name).grid(
 		row=0, column=1, pady=10, padx=5)
 
-	tk.Button( Window, text="Cargar datos", command=lambda: create()).grid(row=1, column=0, pady=5, padx=5)
+	tk.Button( Window, text="Cargar datos", command=lambda: create(category_name.get())).grid(row=1, column=0, pady=5, padx=5)
 
 def product_entry_window():
-	def create():
-		category_id = get_category_id(dropdown.get())
-
+	def create(category_id, product_name):
+		logging.info(f"Agregando el producto {product_name} a la categoria con el id {category_id}")
 		# Conectar con la base de datos
-		db_connection = sqlite3.connect("database.sqlite3")
-		db_cursor = db_connection.cursor()
 		# Insertar en la tabla de los productos
 		db_cursor.execute(
 			'''INSERT INTO Products
 			VALUES(?,?,?)''',
-			(None, category_id, product_name.get())
+			(None, category_id, product_name)
 		)
 		db_connection.commit()
+
 	# Creacion de la nueva ventana tk.Toplevel
 	Window = tk.Toplevel()
 	Window.attributes('-type', 'dialog')
@@ -133,6 +129,7 @@ def product_entry_window():
 	# declaracion de variables
 	product_name = tk.StringVar()
 	options = get_categories()
+	options = [' '.join(x) for x in options]
 	# Entrada de producto
 	tk.Label(Window, text="Producto:").grid(row=0, column=0)
 	tk.Entry(Window, textvariable=product_name).grid(
@@ -145,12 +142,15 @@ def product_entry_window():
 
 	# Boton para la carga de datos
 	button_cargar_datos = tk.Button(
-		Window, text="Cargar datos", command=lambda: create())
+		Window, text="Cargar datos", command=lambda: create(
+			get_category_id(dropdown.get()),
+			product_name.get()
+		)
+	)
 	button_cargar_datos.grid(row=1, column=0, pady=5, padx=5)
 
 def order_entry_window():
 	# TODO falta el agregado a la base de datos
-	lista_clientas=get_clients()
 	# Esto estaba para printear que clientas habia
 	#for i in range(len(lista_clientas)):
 	#	print (lista_clientas[i][0] + " " + lista_clientas[i][1])
@@ -184,17 +184,66 @@ def order_entry_window():
 		# 3 - inserto en la textbox el contendio que habia antes + los productos que quiero agregar
 		textbox_added_products.insert(1.0, contenido_anterior + selected_products)
 		actualizar_total()
+	
+	def create(orderdate, customer_id, total_amount, medio_pago_id, productos, profesional_id):
+		# ------------ Logging ------------------------
+		logging.info(f'''got the following data:
+		orderdate: {orderdate}
+		customer id: {customer_id}
+		total amount: {total_amount}
+		medio de pago ID: {medio_pago_id},
+		profesional ID: {profesional_id}
+		''')
+		for i in range(len(productos)): 
+			logging.info(f'''Producto numero {i+1}:
+				nombre del producto: {productos[i].product}
+				cantidad del producto: {productos[i].amount}
+				precio del producto: {productos[i].price}'''
+			)
+		# ------------ ------- ------------------------
+		
+		db_cursor.execute(
+			'''INSERT INTO Orders
+			VALUES(?,?,?,?,?,?)''',
+			(None, orderdate, customer_id, total_amount, medio_pago_id, profesional_id)
+		)
+		db_cursor.execute(
+			'''SELECT order_id
+			FROM Orders
+			WHERE orderdate = ? AND customer_id = ? AND total_amount = ? AND medio_pago_id = ?''',
+			(orderdate, customer_id, total_amount, medio_pago_id)
+		)
+		order_id = db_cursor.fetchone()
+		order_id = order_id[0]
+		logging.info(f"got the order id with the following value: {order_id}")
+		for i in range(len(productos)):
+			db_cursor.execute(
+				'''INSERT INTO Orderline
+				VALUES (?,?,?,?,?)''',
+				(None, order_id, productos[i].product, productos[i].amount, productos[i].price)
+			)
+		db_connection.commit()
+
 
 	Window = tk.Toplevel()
 	Window.attributes('-type', 'dialog')
 	Window.title("Agregar orden de compra")
 
-	amount = tk.IntVar()
 	categories = get_categories()
+	categories = [' '.join(x) for x in categories]
 	products = get_products()
+	products = [' '.join(x) for x in products]
+	medios_de_pago = get_medios_de_pago()
+	medios_de_pago = [' '.join(x) for x in medios_de_pago]
+	lista_clientas=get_clients()
+	lista_clientas = [' '.join(x) for x in lista_clientas]
+	profesionales = get_profesionales()
+	profesionales = [' '.join(x) for x in profesionales]
+	amount = tk.IntVar()
 	price = tk.IntVar()
 	total_displayed = tk.IntVar()
-	medios_de_pago = get_medios_de_pago()
+
+	#logging.debug(f"productos: {products}")
 
 	# Entrada de cantidad
 	tk.Label(Window, text="Cantidad").grid(row=0, column=0, padx=5, pady=5)
@@ -204,7 +253,7 @@ def order_entry_window():
 	# Dropdown menu para las categorias
 	tk.Label(Window, text="Categoria").grid(row=0, column=1, padx=5, pady=5)
 	dropdown_categories = ttk.Combobox(Window, values=categories)
-	dropdown_categories.set("Elige una opcion...")
+	dropdown_categories.set("Elige una opcion... [WIP]")
 	dropdown_categories.grid(row=1, column=1)
 
 	# Dropdown para los productos
@@ -221,6 +270,12 @@ def order_entry_window():
 	tk.Label(Window, text="Precio").grid(row=0, column=3, padx=5, pady=5)
 	tk.Entry(Window, textvariable=price).grid( row=1, column=3, pady=10, padx=5)
 
+	# Seleccion de profesional
+	tk.Label(Window, text="Profesional").grid(row=0, column=6, padx=5, pady=5)
+	dropdown_profesional= ttk.Combobox(Window, values=profesionales)
+	dropdown_profesional.set("Elige una profesional...")
+	dropdown_profesional.grid(row=1, column=6)
+
 	# Textbox de los productos seleccionados
 	textbox_added_products = tk.Text(Window, height=5, width=40)
 	textbox_added_products.grid(row=2, column=0,columnspan=2)
@@ -228,6 +283,15 @@ def order_entry_window():
 	# Precio total
 	tk.Label(Window, text="Total: $").grid(row=2, column=2)
 	tk.Entry(Window, textvariable=total_displayed).grid(row=2, column=3)
+
+	# Logo de pura esencia
+	img = tk.PhotoImage(file='./logo.png')
+	label =tk.Label(
+		Window,
+		image=img
+	)
+	label.image=img
+	label.grid(row=2, column=4)
 
 	# Lista de clientas
 	tk.Label(Window, text="Clienta").grid(row=0, column=4)
@@ -245,13 +309,20 @@ def order_entry_window():
 	boton = tk.Button(Window, text="Add", command=lambda: agregar_producto(amount.get(), dropdown_products.get(), price.get()))
 	boton.grid(row=3, column=0)
 
+	# Button de Finish
+	tk.Button(Window, text="Finalizar", command=lambda: 
+		create(
+			datetime.today().strftime('%Y-%m-%d'),
+			dropdown_clients.current(),
+			total_displayed.get(),
+			dropdown_medios_pago.current(),
+			lista_productos,
+			dropdown_profesional.current()
+		)
+	).grid(row=3, column=1)
+
 def medio_de_pago_entry_window():
 	def create(medio_de_pago):
-
-		# Conectar con la base de datos
-		db_connection = sqlite3.connect("database.sqlite3")
-		db_cursor = db_connection.cursor()
-		# Insertar en la tabla de los productos
 		db_cursor.execute(
 			'''INSERT INTO Medios_pago
 			VALUES(?,?)''',
@@ -269,3 +340,39 @@ def medio_de_pago_entry_window():
 	tk.Label(Window, text="Ingrese el medio de pago").grid(row=0, column=0, pady=5, padx=5)
 	tk.Entry(Window, textvariable=medio_de_pago).grid(row=1, column=0, padx=5, pady=5)
 	tk.Button(Window, text="Añadir", command= lambda: create(medio_de_pago.get())).grid(row=2, column=0)
+
+def profesional_entry_window():
+	def create(nombre, apellido, especializacion):
+		db_cursor.execute(
+			'''INSERT INTO Profesionales
+			VALUES(?,?,?,?)''',
+			(None, nombre, apellido, especializacion)
+		)
+		db_connection.commit()
+		logging.info(f'''Adding profesional with values:
+		Name: {nombre}
+		Surname: {apellido}
+		Especializacion: {especializacion} ''')
+
+	Window = tk.Toplevel()
+	Window.attributes('-type', 'dialog')
+	Window.title("Agregar medio de pago")
+
+	nombre = tk.StringVar()
+	apellido = tk.StringVar()
+	especializacion = tk.StringVar()
+
+	# Entrada de nombre
+	tk.Label(Window, text="Nombre").grid(row=0, column=0, pady=5, padx=5)
+	tk.Entry(Window, textvariable=nombre).grid(row=0, column=1, padx=5, pady=5)
+
+	# Entrada de Apellido
+	tk.Label(Window, text="Apellido").grid(row=1, column=0, pady=5, padx=5)
+	tk.Entry(Window, textvariable=apellido).grid(row=1, column=1, padx=5, pady=5)
+	
+	# Entrada de Especializacion
+	tk.Label(Window, text="Especializacion").grid(row=2, column=0, pady=5, padx=5)
+	tk.Entry(Window, textvariable=especializacion).grid(row=2, column=1, padx=5, pady=5)
+
+	# Boton para añadir
+	tk.Button(Window, text="Añadir", command= lambda: create(nombre.get(), apellido.get(), especializacion.get())).grid(row=3, column=0)
