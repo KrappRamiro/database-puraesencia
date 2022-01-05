@@ -96,7 +96,7 @@ The database was made in SQLITE using the sqlite3 python library, and it consist
 
 <div align="center">
 	<a href="https://github.com/KrappRamiro/database-puraesencia">
-		<img src="images/database_schema.png" alt="Logo" width="800" height="800">
+		<img src="images/database_schema.png" alt="Logo" width=auto height=auto>
 	</a>
 </div>
 
