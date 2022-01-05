@@ -30,7 +30,7 @@
 <br />
 <div align="center">
 	<a href="https://github.com/KrappRamiro/database-puraesencia">
-		<img src="images/logo.png" alt="Logo" width="80" height="80">
+		<img src="images/logo1.png" alt="Logo" width="160" height="160">
 	</a>
 
 <h3 align="center">Base de Datos Pura Esencia</h3>
@@ -188,7 +188,7 @@ You can also find tkinter in your distribution repository
 To add info about something you want, like a customer, category for a product, a product, a proffesional, or a payment method,
 you have the add buttons, which are located in the window that opens when you start the program.
 
-
+### Screenshots of the program
 
 
 

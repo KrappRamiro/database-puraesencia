@@ -356,7 +356,7 @@ def proffesional_entry_window():
 
 	Window = tk.Toplevel()
 	Window.attributes('-type', 'dialog')
-	Window.title("Agregar medio de pago")
+	Window.title("Agregar profesional")
 
 	nombre = tk.StringVar()
 	apellido = tk.StringVar()
