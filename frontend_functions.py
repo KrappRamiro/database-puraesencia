@@ -285,13 +285,13 @@ def order_entry_window():
 	tk.Entry(Window, textvariable=total_displayed).grid(row=2, column=3)
 
 	# Logo de pura esencia
-	img = tk.PhotoImage(file='./logo.png')
+	img = tk.PhotoImage(file='./images/logo_largo.png')
 	label =tk.Label(
 		Window,
 		image=img
 	)
 	label.image=img
-	label.grid(row=2, column=4)
+	label.grid(row=2, column=4, columnspan=3)
 
 	# Lista de clientas
 	tk.Label(Window, text="Clienta").grid(row=0, column=4)

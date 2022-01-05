@@ -190,6 +190,56 @@ you have the add buttons, which are located in the window that opens when you st
 
 ### Screenshots of the program
 
+#### Principal menu
+<div align="left">
+	<a href="https://github.com/KrappRamiro/database-puraesencia">
+		<img src="images/ventana_principal.png" alt="Logo" width=auto height=auto>
+	</a>
+</div>
+
+#### Adding a client
+<div align="left">
+	<a href="https://github.com/KrappRamiro/database-puraesencia">
+		<img src="images/ventana_agregar_clienta.png" alt="Logo" width=auto height=auto>
+	</a>
+</div>
+
+#### Adding a product category
+<div align="left">
+	<a href="https://github.com/KrappRamiro/database-puraesencia">
+		<img src="images/ventana_agregar_categoria.png" alt="Logo" width=auto height=auto>
+	</a>
+</div>
+
+#### Adding a product
+<div align="left">
+	<a href="https://github.com/KrappRamiro/database-puraesencia">
+		<img src="images/ventana_agregar_producto.png" alt="Logo" width=auto height=auto>
+	</a>
+</div>
+
+#### Adding a payment method
+<div align="left">
+	<a href="https://github.com/KrappRamiro/database-puraesencia">
+		<img src="images/ventana_agregar_medio_pago.png" alt="Logo" width=auto height=auto>
+	</a>
+</div>
+
+#### Adding a proffesional
+<div align="left">
+	<a href="https://github.com/KrappRamiro/database-puraesencia">
+		<img src="images/ventana_agregar_profesional.png" alt="Logo" width=auto height=auto>
+	</a>
+</div>
+
+#### Adding a purchase order
+<div align="left">
+	<a href="https://github.com/KrappRamiro/database-puraesencia">
+		<img src="images/ventana_agregar_orden.png" alt="Logo" width=auto height=auto>
+	</a>
+</div>
+
+
 
 
 
