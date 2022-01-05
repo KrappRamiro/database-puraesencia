@@ -29,9 +29,9 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/KrappRamiro/database-puraesencia">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
+	<a href="https://github.com/KrappRamiro/database-puraesencia">
+		<img src="images/logo.png" alt="Logo" width="80" height="80">
+	</a>
 
 <h3 align="center">Base de Datos Pura Esencia</h3>
 
@@ -82,7 +82,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](images/pura_esencia_largo.png)
+[![Product Name Screen Shot][product-screenshot]](images/logo_largo.png)
 
 <!--Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `KrappRamiro`, `database-puraesencia`, `Ramiro_Krapp`, `Ramiro_Krapp`, `krappramiro.jpg`, `gmail.com`, `Base de Datos Pura Esencia`, `A relational database made for Pura Esencia, with easy to use and simple-design graphical interface made in tkinter` -->
 
@@ -163,9 +163,15 @@ You can also find tkinter in your distribution repository
 ## Usage
 
 <!--Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.-->
-The program allows for input of 
+To add info about something you want, like a customer, category for a product, a product, a proffesional, or a payment method,
+you have the add buttons, which are located in the window that opens when you start the program.
 
-[![Product Name Screen Shot][product-screenshot]](images/database_schema.png)
+<div align="center">
+	<a href="https://github.com/KrappRamiro/database-puraesencia">
+		<img src="images/database_schema.png" alt="Logo" width="800" height="800">
+	</a>
+</div>
+
 
 
 
