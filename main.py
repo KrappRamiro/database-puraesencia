@@ -45,7 +45,7 @@ button_agregar_medios_pago = tk.Button(mi_frame, text="Agregar medio de pago", c
 button_agregar_medios_pago.grid(row=0, column=4, padx=5, pady=5)
 
 #Boton para agregar profesionales
-button_agregar_profesionales = tk.Button(mi_frame, text="Agregar profesionales", command= lambda: profesional_entry_window())
+button_agregar_profesionales = tk.Button(mi_frame, text="Agregar profesionales", command= lambda: proffesional_entry_window())
 button_agregar_profesionales.grid(row=0, column=5, padx=5, pady=5)
 # Crea la base de datos si no existe
 connect_to_database()

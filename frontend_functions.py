@@ -185,14 +185,14 @@ def order_entry_window():
 		textbox_added_products.insert(1.0, contenido_anterior + selected_products)
 		actualizar_total()
 	
-	def create(orderdate, customer_id, total_amount, medio_pago_id, productos, profesional_id):
+	def create(orderdate, customer_id, total_amount, payment_method_id, productos, proffesional_id):
 		# ------------ Logging ------------------------
 		logging.info(f'''got the following data:
 		orderdate: {orderdate}
 		customer id: {customer_id}
 		total amount: {total_amount}
-		medio de pago ID: {medio_pago_id},
-		profesional ID: {profesional_id}
+		medio de pago ID: {payment_method_id},
+		proffesional ID: {proffesional_id}
 		''')
 		for i in range(len(productos)): 
 			logging.info(f'''Producto numero {i+1}:
@@ -205,13 +205,13 @@ def order_entry_window():
 		db_cursor.execute(
 			'''INSERT INTO Orders
 			VALUES(?,?,?,?,?,?)''',
-			(None, orderdate, customer_id, total_amount, medio_pago_id, profesional_id)
+			(None, orderdate, customer_id, total_amount, payment_method_id, proffesional_id)
 		)
 		db_cursor.execute(
 			'''SELECT order_id
 			FROM Orders
-			WHERE orderdate = ? AND customer_id = ? AND total_amount = ? AND medio_pago_id = ?''',
-			(orderdate, customer_id, total_amount, medio_pago_id)
+			WHERE orderdate = ? AND customer_id = ? AND total_amount = ? AND payment_method_id = ?''',
+			(orderdate, customer_id, total_amount, payment_method_id)
 		)
 		order_id = db_cursor.fetchone()
 		order_id = order_id[0]
@@ -237,8 +237,8 @@ def order_entry_window():
 	medios_de_pago = [' '.join(x) for x in medios_de_pago]
 	lista_clientas=get_clients()
 	lista_clientas = [' '.join(x) for x in lista_clientas]
-	profesionales = get_profesionales()
-	profesionales = [' '.join(x) for x in profesionales]
+	proffesionales = get_proffesionales()
+	proffesionales = [' '.join(x) for x in proffesionales]
 	amount = tk.IntVar()
 	price = tk.IntVar()
 	total_displayed = tk.IntVar()
@@ -270,11 +270,11 @@ def order_entry_window():
 	tk.Label(Window, text="Precio").grid(row=0, column=3, padx=5, pady=5)
 	tk.Entry(Window, textvariable=price).grid( row=1, column=3, pady=10, padx=5)
 
-	# Seleccion de profesional
+	# Seleccion de proffesional
 	tk.Label(Window, text="Profesional").grid(row=0, column=6, padx=5, pady=5)
-	dropdown_profesional= ttk.Combobox(Window, values=profesionales)
-	dropdown_profesional.set("Elige una profesional...")
-	dropdown_profesional.grid(row=1, column=6)
+	dropdown_proffesional= ttk.Combobox(Window, values=proffesionales)
+	dropdown_proffesional.set("Elige una proffesional...")
+	dropdown_proffesional.grid(row=1, column=6)
 
 	# Textbox de los productos seleccionados
 	textbox_added_products = tk.Text(Window, height=5, width=40)
@@ -317,14 +317,14 @@ def order_entry_window():
 			total_displayed.get(),
 			dropdown_medios_pago.current(),
 			lista_productos,
-			dropdown_profesional.current()
+			dropdown_proffesional.current()
 		)
 	).grid(row=3, column=1)
 
 def medio_de_pago_entry_window():
 	def create(medio_de_pago):
 		db_cursor.execute(
-			'''INSERT INTO Medios_pago
+			'''INSERT INTO Payment_methods
 			VALUES(?,?)''',
 			(None, medio_de_pago)
 		)
@@ -341,15 +341,15 @@ def medio_de_pago_entry_window():
 	tk.Entry(Window, textvariable=medio_de_pago).grid(row=1, column=0, padx=5, pady=5)
 	tk.Button(Window, text="Añadir", command= lambda: create(medio_de_pago.get())).grid(row=2, column=0)
 
-def profesional_entry_window():
+def proffesional_entry_window():
 	def create(nombre, apellido, especializacion):
 		db_cursor.execute(
-			'''INSERT INTO Profesionales
+			'''INSERT INTO Proffesional
 			VALUES(?,?,?,?)''',
 			(None, nombre, apellido, especializacion)
 		)
 		db_connection.commit()
-		logging.info(f'''Adding profesional with values:
+		logging.info(f'''Adding proffesional with values:
 		Name: {nombre}
 		Surname: {apellido}
 		Especializacion: {especializacion} ''')

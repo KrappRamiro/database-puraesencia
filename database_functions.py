@@ -21,17 +21,17 @@ def connect_to_database():
 			)'''
 		)
 		db_cursor.execute(
-			''' CREATE TABLE IF NOT EXISTS Medios_pago (
-				medio_pago_id			INTEGER PRIMARY KEY AUTOINCREMENT,
-				medio_pago_name			TEXT NOT NULL UNIQUE
+			''' CREATE TABLE IF NOT EXISTS Payment_methods (
+				payment_method_id			INTEGER PRIMARY KEY AUTOINCREMENT,
+				payment_method_name			TEXT NOT NULL UNIQUE
 			)'''
 		)
 		db_cursor.execute(
-			''' CREATE TABLE IF NOT EXISTS Profesionales (
-				profesional_id			INTEGER PRIMARY KEY AUTOINCREMENT,
+			''' CREATE TABLE IF NOT EXISTS Proffesional (
+				proffesional_id	hthttps://github.com/othneildrew/Best-README-Templatetps://github.com/othneildrew/Best-README-Template		INTEGER PRIMARY KEY AUTOINCREMENT,
 				first_name				TEXT NOT NULL,
 				last_name				TEXT NOT NULL,
-				especializacion			TEXT
+				especialization			TEXT
 			)'''
 		)
 		db_cursor.execute(
@@ -40,11 +40,11 @@ def connect_to_database():
 				orderdate				TEXT 	NOT NULL,
 				customer_id				INTEGER	NOT NULL,
 				total_amount			FLOAT 	NOT NULL,
-				medio_pago_id			INTEGER NOT NULL,
-				profesional_id			INTEGER NOT NULL,
-				FOREIGN KEY(profesional_id) REFERENCES Profesionales(profesional_id)	ON DELETE CASCADE
-				FOREIGN KEY(customer_id) 	REFERENCES Customers(customer_id)			ON DELETE CASCADE,
-				FOREIGN KEY(medio_pago_id) 	REFERENCES Medios_pago(medio_pago_id) 		ON DELETE CASCADE
+				payment_method_id		INTEGER NOT NULL,
+				proffesional_id			INTEGER NOT NULL,
+				FOREIGN KEY(proffesional_id)	REFERENCES Proffesional(proffesional_id)	  ON DELETE CASCADE
+				FOREIGN KEY(customer_id) 		REFERENCES Customers(customer_id)			  ON DELETE CASCADE,
+				FOREIGN KEY(payment_method_id) 	REFERENCES Payment_methods(payment_method_id) ON DELETE CASCADE
 			)'''
 		)
 		db_cursor.execute(
@@ -65,10 +65,10 @@ def connect_to_database():
 		db_cursor.execute(
 			''' CREATE TABLE IF NOT EXISTS Orderline (
 				orderline_id			INTEGER	PRIMARY KEY AUTOINCREMENT,
-				order_id				INTEGER,
-				product_id				INTEGER,
-				quantity				INTEGER,
-				price					INTEGER,
+				order_id				INTEGER NOT NULL,
+				product_id				INTEGER NOT NULL,
+				quantity				INTEGER NOT NULL,
+				price					FLOAT 	NOT NULL,
 				FOREIGN KEY(order_id) REFERENCES Orders(order_id) ON DELETE CASCADE,
 				FOREIGN KEY(product_id) REFERENCES Products(product_id) ON DELETE CASCADE
 			)'''
@@ -112,13 +112,13 @@ def get_clients():
 def get_medios_de_pago():
 	'''Retorna una lista con el nombre de todos los medios de pago'''
 
-	db_cursor.execute("SELECT medio_pago_name FROM Medios_pago")
+	db_cursor.execute("SELECT payment_method_name FROM Payment_methods")
 	return db_cursor.fetchall()
 
-def get_medio_de_pago_id_by_name(medio_pago):
+def get_medio_de_pago_id_by_name(payment_method):
 
 	db_cursor.execute(
-		"SELECT medio_pago_id FROM Medio_pago WHERE medio_pago_name = ?", (medio_pago,)
+		"SELECT payment_method_id FROM Medio_pago WHERE payment_method_name = ?", (payment_method,)
 	)
 	return db_cursor.fetchall()
 
@@ -156,9 +156,9 @@ def get_customer_id_by_name(firstname, lastname):
 		logging.warning("customer not found")
 		return None
 
-def get_profesionales():
-	'''Retorna la lista de profesionales'''
-	db_cursor.execute("SELECT first_name, last_name FROM Profesionales")
+def get_proffesionales():
+	'''Retorna la lista de proffesionales'''
+	db_cursor.execute("SELECT first_name, last_name FROM Proffesional")
 	return db_cursor.fetchall()
 
 

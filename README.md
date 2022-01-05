@@ -82,9 +82,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Product Name Screen Shot][product-screenshot]](images/pura_esencia_largo.png)
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: <!--`KrappRamiro`, `database-puraesencia`, `Ramiro_Krapp`, `Ramiro_Krapp`, `krappramiro.jpg`, `gmail.com`, `Base de Datos Pura Esencia`, `A relational database made for Pura Esencia, with easy to use and simple-design graphical interface made in tkinter` -->
+<!--Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `KrappRamiro`, `database-puraesencia`, `Ramiro_Krapp`, `Ramiro_Krapp`, `krappramiro.jpg`, `gmail.com`, `Base de Datos Pura Esencia`, `A relational database made for Pura Esencia, with easy to use and simple-design graphical interface made in tkinter` -->
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -162,7 +162,12 @@ You can also find tkinter in your distribution repository
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+<!--Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.-->
+The program allows for input of 
+
+[![Product Name Screen Shot][product-screenshot]](images/database_schema.png)
+
+
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 
