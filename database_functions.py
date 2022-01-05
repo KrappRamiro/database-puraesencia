@@ -15,7 +15,7 @@ def connect_to_database():
 				first_name				TEXT 	NOT NULL,
 				last_name				TEXT 	NOT NULL,
 				email 					TEXT	UNIQUE,
-				gender					TEXT 	DEFAULT '?',
+				gender					TEXT 	DEFAULT 'x',
 				mercado_pago_id 		TEXT 	UNIQUE,
 				mercado_pago_alias		TEXT 	UNIQUE
 			)'''
@@ -24,6 +24,14 @@ def connect_to_database():
 			''' CREATE TABLE IF NOT EXISTS Medios_pago (
 				medio_pago_id			INTEGER PRIMARY KEY AUTOINCREMENT,
 				medio_pago_name			TEXT NOT NULL UNIQUE
+			)'''
+		)
+		db_cursor.execute(
+			''' CREATE TABLE IF NOT EXISTS Profesionales (
+				profesional_id			INTEGER PRIMARY KEY AUTOINCREMENT,
+				first_name				TEXT NOT NULL,
+				last_name				TEXT NOT NULL,
+				especializacion			TEXT
 			)'''
 		)
 		db_cursor.execute(
@@ -49,7 +57,7 @@ def connect_to_database():
 		db_cursor.execute(
 			''' CREATE TABLE IF NOT EXISTS Products (
 				product_id				INTEGER	PRIMARY KEY AUTOINCREMENT,
-				category_id				INTEGER,
+				category_id				INTEGER NOT NULL,
 				product_name			TEXT NOT NULL UNIQUE,
 				FOREIGN KEY(category_id) REFERENCES Categories(category_id) ON DELETE CASCADE
 			)'''
@@ -65,14 +73,7 @@ def connect_to_database():
 				FOREIGN KEY(product_id) REFERENCES Products(product_id) ON DELETE CASCADE
 			)'''
 		)
-		db_cursor.execute(
-			''' CREATE TABLE IF NOT EXISTS Profesionales (
-				profesional_id			INTEGER PRIMARY KEY AUTOINCREMENT,
-				first_name				TEXT NOT NULL,
-				last_name				TEXT NOT NULL,
-				especializacion			TEXT
-			)'''
-		)
+
 	except:
 		messagebox.showerror(
 			"Error", "Ha ocurrido un error desconocido conectando a la base de datos")
