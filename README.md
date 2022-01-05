@@ -29,23 +29,23 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
+  <a href="https://github.com/KrappRamiro/database-puraesencia">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">project_title</h3>
+<h3 align="center">Base de Datos Pura Esencia</h3>
 
   <p align="center">
-    project_description
+    A relational database made for Pura Esencia, with easy to use and simple-design graphical interface made in tkinter
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/KrappRamiro/database-puraesencia"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
+    <a href="https://github.com/KrappRamiro/database-puraesencia">View Demo</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>
+    <a href="https://github.com/KrappRamiro/database-puraesencia/issues">Report Bug</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
+    <a href="https://github.com/KrappRamiro/database-puraesencia/issues">Request Feature</a>
   </p>
 </div>
 
@@ -84,7 +84,7 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email`, `email_client`, `project_title`, `project_description`
+Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: <!--`KrappRamiro`, `database-puraesencia`, `Ramiro_Krapp`, `Ramiro_Krapp`, `krappramiro.jpg`, `gmail.com`, `Base de Datos Pura Esencia`, `A relational database made for Pura Esencia, with easy to use and simple-design graphical interface made in tkinter` -->
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -92,14 +92,8 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 ### Built With
 
-* [Next.js](https://nextjs.org/)
-* [React.js](https://reactjs.org/)
-* [Vue.js](https://vuejs.org/)
-* [Angular](https://angular.io/)
-* [Svelte](https://svelte.dev/)
-* [Laravel](https://laravel.com)
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
+* [Python](https://www.python.org/)
+* Love
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -108,31 +102,57 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+<!--This is an example of how you may give instructions on setting up your project locally.-->
+To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+You need to have python and tkinter to run the code. 
 
+#### python	
+
+* On Debian-based systems
+```sh
+sudo apt install python
+```
+
+* On Arch-based systems
+```sh
+sudo pacman -S python
+```
+
+#### tkinter
+In order to install tkinter, you need to install pip.
+
+* Pip on debian-based systems
+```sh
+sudo apt install pip
+```
+
+* Pip on Arch-based systems
+```sh
+sudo pacman -S python-pip
+```
+
+* tkinter
+```sh
+pip install tk
+```
+
+You can also find tkinter in your distribution repository
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo using git
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/KrappRamiro/database-puraesencia.git
    ```
-3. Install NPM packages
+2. Install python packages
    ```sh
-   npm install
+   pip install tk
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+3. run the file main.py`main.py`
+   ```sh
+   python3 main.py
    ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -153,12 +173,21 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [] Feature 1
-- [] Feature 2
-- [] Feature 3
-    - [] Nested Feature
+- [x] Creation feature
+	- [x] Client creation
+	- [x] Products and categories creation
+	- [x] Payment method creation
+	- [x] Professionals creation
+	- [x] Purchase orders creation
+- [] Data visualization Feature
+	- [] Visualization of the spending of each client
+	- [] Visualization of the monthly & yearly money input/output
+	- [] Visualization of how much every proffesional makes regularly
+- [] Data Updating feature
+    - [] Changing the values that were inputed previusly
+- [] Data deletion feature
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/KrappRamiro/database-puraesencia/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -172,11 +201,11 @@ Contributions are what make the open source community such an amazing place to l
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
 
-1. Fork the Project
+1. [Fork the Project](https://docs.github.com/en/get-started/quickstart/fork-a-repo)
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+5. [Open a Pull Request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -194,9 +223,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Ramiro Krapp - [@Ramiro_Krapp](https://twitter.com/Ramiro_Krapp) - krappramiro.jpg@gmail.com.com
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Project Link: [https://github.com/KrappRamiro/database-puraesencia](https://github.com/KrappRamiro/database-puraesencia)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -205,9 +234,7 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+* [Othneil Drew's Best README template](https://github.com/othneildrew/Best-README-Template)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -215,16 +242,16 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo_name/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/repo_name/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo_name/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo_name/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/KrappRamiro/database-puraesencia.svg?style=for-the-badge
+[contributors-url]: https://github.com/KrappRamiro/database-puraesencia/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/KrappRamiro/database-puraesencia.svg?style=for-the-badge
+[forks-url]: https://github.com/KrappRamiro/database-puraesencia/network/members
+[stars-shield]: https://img.shields.io/github/stars/KrappRamiro/database-puraesencia.svg?style=for-the-badge
+[stars-url]: https://github.com/KrappRamiro/database-puraesencia/stargazers
+[issues-shield]: https://img.shields.io/github/issues/KrappRamiro/database-puraesencia.svg?style=for-the-badge
+[issues-url]: https://github.com/KrappRamiro/database-puraesencia/issues
+[license-shield]: https://img.shields.io/github/license/KrappRamiro/database-puraesencia.svg?style=for-the-badge
+[license-url]: https://github.com/KrappRamiro/database-puraesencia/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
+[linkedin-url]: https://linkedin.com/in/Ramiro_Krapp
 [product-screenshot]: images/screenshot.png
