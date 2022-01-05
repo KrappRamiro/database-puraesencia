@@ -88,10 +88,10 @@
 	</a>
 </div>
 
-The project itself is a relational database for Pura Esencia's Estheticy business.
-It allows adding information about clients, products, making categorys for the products, adding payment methods,
-adding personnel and purchase orders.
-
+The project itself is an application built around a relational database for 
+Pura Esencia's Estheticy business.
+It allows adding information about clients, products, making categorys for the products, 
+adding payment methods, adding personnel and purchase orders.
 The database was made in SQLITE using the sqlite3 python library, and it consists in 7 tables:
 
 <div align="center">
@@ -103,7 +103,11 @@ The database was made in SQLITE using the sqlite3 python library, and it consist
 Each one of these tables are relationed via foreign keys, which allow for protection of the data integrity and the avoiding of
 data repetition, resulting in more efficient systems.
 
-The program was thought with low or null computer skill personnel in mind, thats the reason for the big and obvious buttons in the menus.
+The program was built to help Estheticist staff, with little or null computer skill, to organize
+money accounts and monitor client activity.
+
+It shines for its easy and obvious to use GUI
+
 This is my first project independent from any course or tutorial.
 
 <!--Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `KrappRamiro`, `database-puraesencia`, `Ramiro_Krapp`, `Ramiro_Krapp`, `krappramiro.jpg`, `gmail.com`, `Base de Datos Pura Esencia`, `A relational database made for Pura Esencia, with easy to use and simple-design graphical interface made in tkinter` -->
