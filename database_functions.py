@@ -41,8 +41,6 @@ def connect_to_database():
 				customer_id				INTEGER	NOT NULL,
 				total_amount			FLOAT 	NOT NULL,
 				payment_method_id		INTEGER NOT NULL,
-				proffesional_id			INTEGER NOT NULL,
-				FOREIGN KEY(proffesional_id)	REFERENCES Proffesional(proffesional_id)	  ON DELETE CASCADE
 				FOREIGN KEY(customer_id) 		REFERENCES Customers(customer_id)			  ON DELETE CASCADE,
 				FOREIGN KEY(payment_method_id) 	REFERENCES Payment_methods(payment_method_id) ON DELETE CASCADE
 			)'''
@@ -69,8 +67,10 @@ def connect_to_database():
 				product_id				INTEGER NOT NULL,
 				quantity				INTEGER NOT NULL,
 				price					FLOAT 	NOT NULL,
-				FOREIGN KEY(order_id) REFERENCES Orders(order_id) ON DELETE CASCADE,
-				FOREIGN KEY(product_id) REFERENCES Products(product_id) ON DELETE CASCADE
+				proffesional_id			INTEGER NOT NULL,
+				FOREIGN KEY(proffesional_id)	REFERENCES Proffesional(proffesional_id) ON DELETE CASCADE
+				FOREIGN KEY(order_id) 			REFERENCES Orders(order_id) 			 ON DELETE CASCADE,
+				FOREIGN KEY(product_id)			REFERENCES Products(product_id) 		 ON DELETE CASCADE
 			)'''
 		)
 

@@ -157,10 +157,11 @@ def order_entry_window():
 	
 	lista_productos = []
 	class Producto():
-		def __init__(self, amount, product, price):
+		def __init__(self, amount, product, price, proffesional):
 			self.amount = amount
 			self.product = product
 			self.price = price
+			self.proffesional = proffesional
 	
 	def actualizar_total():
 		total = 0
@@ -169,13 +170,13 @@ def order_entry_window():
 		logging.info(f"el total es {total}")
 		total_displayed.set(total)
 
-	def agregar_producto(amount, product, price):
-		logging.info(f"Adding {amount} {product}'s with a price of {price} each one")
-		lista_productos.append(Producto(amount, product, price))
+	def agregar_orderline(amount, product, price, proffesional_id, proffesional_name):
+		logging.info(f"Adding {amount} {product}'s with a price of {price} each one, assigned to the proffesional {proffesional_name} with the id {proffesional_id}")
+		lista_productos.append(Producto(amount, product, price, proffesional_id))
 		
 		# Parte de la textbox
 		# 1 - consigo que productos se quiere agregar y que cantidad
-		selected_products = str(amount) + " x " + dropdown_products.get() + " c/u $" + str(price)
+		selected_products = str(amount) + " x " + dropdown_products.get() + " c/u $" + str(price) + "--" + proffesional_name
 
 		# 2 - guardo en contenido_anterior lo que habia antes en la textbox, y limpio la misma
 		contenido_anterior = textbox_added_products.get(1.0, "end")
@@ -198,14 +199,15 @@ def order_entry_window():
 			logging.info(f'''Producto numero {i+1}:
 				nombre del producto: {productos[i].product}
 				cantidad del producto: {productos[i].amount}
-				precio del producto: {productos[i].price}'''
+				precio del producto: {productos[i].price}
+				profesional asignado: {productos[i].proffesional}'''
 			)
 		# ------------ ------- ------------------------
 		
 		db_cursor.execute(
 			'''INSERT INTO Orders
-			VALUES(?,?,?,?,?,?)''',
-			(None, orderdate, customer_id, total_amount, payment_method_id, proffesional_id)
+			VALUES(?,?,?,?,?)''',
+			(None, orderdate, customer_id, total_amount, payment_method_id)
 		)
 		db_cursor.execute(
 			'''SELECT order_id
@@ -219,8 +221,8 @@ def order_entry_window():
 		for i in range(len(productos)):
 			db_cursor.execute(
 				'''INSERT INTO Orderline
-				VALUES (?,?,?,?,?)''',
-				(None, order_id, productos[i].product, productos[i].amount, productos[i].price)
+				VALUES (?,?,?,?,?,?)''',
+				(None, order_id, productos[i].product, productos[i].amount, productos[i].price, productos[i].proffesional)
 			)
 		db_connection.commit()
 
@@ -306,7 +308,7 @@ def order_entry_window():
 	dropdown_medios_pago.grid(row=1, column=5)
 
 	# Button de Add
-	boton = tk.Button(Window, text="Add", command=lambda: agregar_producto(amount.get(), dropdown_products.get(), price.get()))
+	boton = tk.Button(Window, text="Add", command=lambda: agregar_orderline(amount.get(), dropdown_products.get(), price.get(), dropdown_proffesional.current(), dropdown_proffesional.get()))
 	boton.grid(row=3, column=0)
 
 	# Button de Finish
