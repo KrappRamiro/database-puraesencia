@@ -82,7 +82,29 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](images/logo_largo.png)
+<div align="center">
+	<a href="https://github.com/KrappRamiro/database-puraesencia">
+		<img src="images/logo_largo.png" alt="Logo" width="400" height="200">
+	</a>
+</div>
+
+The project itself is a relational database for Pura Esencia's Estheticy business.
+It allows adding information about clients, products, making categorys for the products, adding payment methods,
+adding personnel and purchase orders.
+
+The database was made in SQLITE using the sqlite3 python library, and it consists in 7 tables:
+
+<div align="center">
+	<a href="https://github.com/KrappRamiro/database-puraesencia">
+		<img src="images/database_schema.png" alt="Logo" width="800" height="800">
+	</a>
+</div>
+
+Each one of these tables are relationed via foreign keys, which allow for protection of the data integrity and the avoiding of
+data repetition, resulting in more efficient systems.
+
+The program was thought with low or null computer skill personnel in mind, thats the reason for the big and obvious buttons in the menus.
+This is my first project independent from any course or tutorial.
 
 <!--Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `KrappRamiro`, `database-puraesencia`, `Ramiro_Krapp`, `Ramiro_Krapp`, `krappramiro.jpg`, `gmail.com`, `Base de Datos Pura Esencia`, `A relational database made for Pura Esencia, with easy to use and simple-design graphical interface made in tkinter` -->
 
@@ -166,11 +188,7 @@ You can also find tkinter in your distribution repository
 To add info about something you want, like a customer, category for a product, a product, a proffesional, or a payment method,
 you have the add buttons, which are located in the window that opens when you start the program.
 
-<div align="center">
-	<a href="https://github.com/KrappRamiro/database-puraesencia">
-		<img src="images/database_schema.png" alt="Logo" width="800" height="800">
-	</a>
-</div>
+
 
 
 
@@ -190,13 +208,13 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 	- [x] Payment method creation
 	- [x] Professionals creation
 	- [x] Purchase orders creation
-- [] Data visualization Feature
-	- [] Visualization of the spending of each client
-	- [] Visualization of the monthly & yearly money input/output
-	- [] Visualization of how much every proffesional makes regularly
-- [] Data Updating feature
-    - [] Changing the values that were inputed previusly
-- [] Data deletion feature
+- [ ] Data visualization Feature
+	- [ ] Visualization of the spending of each client
+	- [ ] Visualization of the monthly & yearly money input/output
+	- [ ] Visualization of how much every proffesional makes regularly
+- [ ] Data Updating feature
+    - [ ] Changing the values that were inputed previusly
+- [ ] Data deletion feature
 
 See the [open issues](https://github.com/KrappRamiro/database-puraesencia/issues) for a full list of proposed features (and known issues).
 

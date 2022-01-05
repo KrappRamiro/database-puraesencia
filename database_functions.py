@@ -28,7 +28,7 @@ def connect_to_database():
 		)
 		db_cursor.execute(
 			''' CREATE TABLE IF NOT EXISTS Proffesional (
-				proffesional_id	hthttps://github.com/othneildrew/Best-README-Templatetps://github.com/othneildrew/Best-README-Template		INTEGER PRIMARY KEY AUTOINCREMENT,
+				proffesional_id			INTEGER PRIMARY KEY AUTOINCREMENT,
 				first_name				TEXT NOT NULL,
 				last_name				TEXT NOT NULL,
 				especialization			TEXT
@@ -74,9 +74,10 @@ def connect_to_database():
 			)'''
 		)
 
-	except:
+	except Exception as e:
 		messagebox.showerror(
 			"Error", "Ha ocurrido un error desconocido conectando a la base de datos")
+		print(e)
 
 def get_categories():
 	'''Retorna una lista con el nombre de cada categoria'''
