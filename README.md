@@ -36,7 +36,7 @@
 <h3 align="center">Base de Datos Pura Esencia</h3>
 
   <p align="center">
-    A relational database made for Pura Esencia, with easy to use and simple-design graphical interface made in tkinter
+    A client purchase history program made for Pura Esencia, with easy to use and simple-design graphical interface made in tkinter
     <br />
     <a href="https://github.com/KrappRamiro/database-puraesencia"><strong>Explore the docs »</strong></a>
     <br />
