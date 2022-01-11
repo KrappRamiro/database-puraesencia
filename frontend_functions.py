@@ -1,3 +1,4 @@
+# pylint: disable=bad-indentation
 from database_functions import *
 import tkinter as tk
 from tkinter import messagebox, ttk
@@ -6,8 +7,7 @@ from datetime import date, datetime
 
 
 def show_info():
-	messagebox.showinfo("Interfaz grafica base de datos",
-						"Krapp Ramiro, version 1.0 2021")
+	messagebox.showinfo("Interfaz grafica base de datos", "Krapp Ramiro, version 1.0 2021")
 
 def show_license():
 	messagebox.showwarning("Licencia", "Producto bajo licencia GNU GPL v2.0")
@@ -150,18 +150,18 @@ def product_entry_window():
 	button_cargar_datos.grid(row=1, column=0, pady=5, padx=5)
 
 def order_entry_window():
-	# TODO falta el agregado a la base de datos
 	# Esto estaba para printear que clientas habia
 	#for i in range(len(lista_clientas)):
 	#	print (lista_clientas[i][0] + " " + lista_clientas[i][1])
 	
 	lista_productos = []
 	class Producto():
-		def __init__(self, amount, product, price, proffesional):
+		def __init__(self, amount, product, price, proffesional,senia):
 			self.amount = amount
 			self.product = product
 			self.price = price
 			self.proffesional = proffesional
+			self.senia = senia
 	
 	def actualizar_total():
 		total = 0
@@ -170,9 +170,9 @@ def order_entry_window():
 		logging.info(f"el total es {total}")
 		total_displayed.set(total)
 
-	def agregar_orderline(amount, product, price, proffesional_id, proffesional_name):
-		logging.info(f"Adding {amount} {product}'s with a price of {price} each one, assigned to the proffesional {proffesional_name} with the id {proffesional_id}")
-		lista_productos.append(Producto(amount, product, price, proffesional_id))
+	def agregar_orderline(amount, product, price, proffesional_id, proffesional_name, senia):
+		logging.info(f"Adding {amount} {product}'s with a price of {price} each one, assigned to the proffesional {proffesional_name} with the id {proffesional_id} with a seña of {senia}")
+		lista_productos.append(Producto(amount, product, price, proffesional_id, senia))
 		
 		# Parte de la textbox
 		# 1 - consigo que productos se quiere agregar y que cantidad
@@ -185,7 +185,6 @@ def order_entry_window():
 		# 3 - inserto en la textbox el contendio que habia antes + los productos que quiero agregar
 		textbox_added_products.insert(1.0, contenido_anterior + selected_products)
 		actualizar_total()
-	
 	def create(orderdate, customer_id, total_amount, payment_method_id, productos, proffesional_id):
 		# ------------ Logging ------------------------
 		logging.info(f'''got the following data:
@@ -200,7 +199,8 @@ def order_entry_window():
 				nombre del producto: {productos[i].product}
 				cantidad del producto: {productos[i].amount}
 				precio del producto: {productos[i].price}
-				profesional asignado: {productos[i].proffesional}'''
+				profesional asignado: {productos[i].proffesional}
+				seña: {productos[i].senia}'''
 			)
 		# ------------ ------- ------------------------
 		
@@ -221,8 +221,8 @@ def order_entry_window():
 		for i in range(len(productos)):
 			db_cursor.execute(
 				'''INSERT INTO Orderline
-				VALUES (?,?,?,?,?,?)''',
-				(None, order_id, productos[i].product, productos[i].amount, productos[i].price, productos[i].proffesional)
+				VALUES (?,?,?,?,?,?,?)''',
+				(None, order_id, productos[i].product, productos[i].amount, productos[i].price, productos[i].proffesional, productos[i].senia)
 			)
 		db_connection.commit()
 
@@ -237,19 +237,20 @@ def order_entry_window():
 	products = [' '.join(x) for x in products]
 	medios_de_pago = get_medios_de_pago()
 	medios_de_pago = [' '.join(x) for x in medios_de_pago]
-	lista_clientas=get_clients()
+	lista_clientas=get_customers()
 	lista_clientas = [' '.join(x) for x in lista_clientas]
 	proffesionales = get_proffesionales()
 	proffesionales = [' '.join(x) for x in proffesionales]
 	amount = tk.IntVar()
 	price = tk.IntVar()
 	total_displayed = tk.IntVar()
+	senia=tk.IntVar()
 
 	#logging.debug(f"productos: {products}")
 
 	# Entrada de cantidad
 	tk.Label(Window, text="Cantidad").grid(row=0, column=0, padx=5, pady=5)
-	tk.Entry(Window, textvariable=amount).grid(
+	tk.Spinbox(Window, from_=0, to=99, textvariable=amount).grid(
 		row=1, column=0, pady=10, padx=5)
 
 	# Dropdown menu para las categorias
@@ -307,8 +308,12 @@ def order_entry_window():
 	dropdown_medios_pago.set("Elige un medio de pago...")
 	dropdown_medios_pago.grid(row=1, column=5)
 
+	# Seña
+	tk.Label(Window, text="Seña").grid(row=0, column=7)
+	tk.Entry(Window, textvariable=senia).grid(row=1, column=7)
+
 	# Button de Add
-	boton = tk.Button(Window, text="Add", command=lambda: agregar_orderline(amount.get(), dropdown_products.get(), price.get(), dropdown_proffesional.current(), dropdown_proffesional.get()))
+	boton = tk.Button(Window, text="Add", command=lambda: agregar_orderline(amount.get(), dropdown_products.current(), price.get(), dropdown_proffesional.current(), dropdown_proffesional.get(), senia.get()))
 	boton.grid(row=3, column=0)
 
 	# Button de Finish
@@ -323,7 +328,7 @@ def order_entry_window():
 		)
 	).grid(row=3, column=1)
 
-def medio_de_pago_entry_window():
+def payment_method_entry_window():
 	def create(medio_de_pago):
 		db_cursor.execute(
 			'''INSERT INTO Payment_methods
@@ -378,3 +383,69 @@ def proffesional_entry_window():
 
 	# Boton para añadir
 	tk.Button(Window, text="Añadir", command= lambda: create(nombre.get(), apellido.get(), especializacion.get())).grid(row=3, column=0)
+
+def view_general_data_window():
+	Window = tk.Toplevel()
+	Window.attributes('-type', 'dialog')
+	Window.title("ver info")
+	db_cursor.execute(
+		# TODO todo el select de aca, es lo primero que tenes que hacer
+		''' SELECT Orders.order_id, Orders.orderdate, Orders.customer_id, Orderline.product_id, Orderline.senia,
+					Orders.payment_method_id, Orderline.price, Orderline.proffesional_id
+		FROM Orders
+		JOIN Orderline
+		ON Orders.order_id = Orderline.order_id
+		'''
+	)
+	datalist = db_cursor.fetchall()
+	for x in datalist:
+		print(x)
+	datalist = [list(ele) for ele in datalist]
+	for data in datalist:
+		data[2] = get_customer_fullname_by_id(data[2]+1)
+		data[3] = get_product_name_by_id(data[3]+1)
+		data[5] = get_payment_method_name_by_id(data[5]+1)
+		data[7] = get_proffesional_fullname_by_id(data[7]+1)
+
+	for x in datalist:
+		print(x)
+	tk.Label(Window, text="Numero de Orden").grid(row=0, column=0, padx=5, pady=5)
+	tk.Label(Window, text="Fecha").grid(row=0, column=1, padx=5, pady=5)
+	tk.Label(Window, text="Clienta").grid(row=0, column=2, padx=5, pady=5)
+	tk.Label(Window, text="Tratamiento").grid(row=0, column=3, padx=5, pady=5)
+	tk.Label(Window, text="Seña").grid(row=0, column=4, padx=5, pady=5)
+	tk.Label(Window, text="Medio de pago").grid(row=0, column=5, padx=5, pady=5)
+	tk.Label(Window, text="Precio").grid(row=0, column=6, padx=5, pady=5)
+	tk.Label(Window, text="Profesional").grid(row=0, column=7, padx=5, pady=5)
+
+	widgets = {}
+	row = 1
+	for order_id, date, client, treatment, senia, payment_method, price, proffesional in (datalist):
+	#Order-id Fecha Clienta Tratamiento Seña Medio de Pago Precio Profesional
+		row += 1
+		widgets[order_id] = {
+			# tendria que googlear como funciona : en   "xxxx" : tk.Label
+			"order_id": tk.Label(Window, text=order_id),
+			"date": tk.Label(Window, text=date),
+			"client": tk.Label(Window, text=client),
+			"treatment": tk.Label(Window, text=treatment),
+			"senia": tk.Label(Window, text=senia),
+			"payment_method": tk.Label(Window, text=payment_method),
+			"price": tk.Label(Window, text=price),
+			"proffesional": tk.Label(Window, text=proffesional)
+		}
+
+		widgets[order_id]["order_id"].grid(row=row, column=0, sticky="nsew", padx=5, pady=5)
+		widgets[order_id]["date"].grid(row=row, column=1, sticky="nsew", padx=5, pady=5)
+		widgets[order_id]["client"].grid(row=row, column=2, sticky="nsew", padx=5, pady=5)
+		widgets[order_id]["treatment"].grid(row=row, column=3, sticky="nsew", padx=5, pady=5)
+		widgets[order_id]["senia"].grid(row=row, column=4, sticky="nsew", padx=5, pady=5)
+		widgets[order_id]["payment_method"].grid(row=row, column=5, sticky="nsew", padx=5, pady=5)
+		widgets[order_id]["price"].grid(row=row, column=6, sticky="nsew", padx=5, pady=5)
+		widgets[order_id]["proffesional"].grid(row=row, column=7, sticky="nsew", padx=5, pady=5)
+
+		Window.grid_columnconfigure(1, weight=1)
+		Window.grid_columnconfigure(2, weight=1)
+		# invisible row after last row gets all extra space
+		Window.grid_rowconfigure(row+1, weight=1)
+

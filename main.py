@@ -24,29 +24,34 @@ mi_frame = tk.Frame(root)
 mi_frame.config(width=300, height=400)
 mi_frame.pack()
 
+# ------------ Inicio de la fila de entrada de datos ---------------------
 # Boton para agregar clienta
-button_agregar_clienta = tk.Button(mi_frame, text="Agregar clienta", command=lambda: client_entry_window())
-button_agregar_clienta.grid(row=0, column=0, padx=5, pady=5)
+tk.Button(mi_frame, text="Agregar clienta", command=lambda: client_entry_window()).grid(row=0, column=0, padx=5, pady=5)
 
 # Boton para agregar producto
-button_agregar_producto = tk.Button(mi_frame, text="Agregar Producto", command=lambda: product_entry_window())
-button_agregar_producto.grid(row=0, column=1, padx=5, pady=5)
+tk.Button(mi_frame, text="Agregar Producto", command=lambda: product_entry_window()) .grid(row=0, column=1, padx=5, pady=5)
 
 # Boton para agregar categoria
-button_agregar_categorias = tk.Button(mi_frame, text="Agregar categorias", command= lambda: category_entry_window())
-button_agregar_categorias.grid(row=0, column=2, padx=5, pady=5)
+tk.Button(mi_frame, text="Agregar categorias", command= lambda: category_entry_window()).grid(row=0, column=2, padx=5, pady=5)
 
 # Boton para agregar una orden de compra
-button_agregar_order = tk.Button(mi_frame, text="Agregar order", command= lambda: order_entry_window())
-button_agregar_order.grid(row=0, column=3, padx=5, pady=5)
+tk.Button(mi_frame, text="Agregar order", command= lambda: order_entry_window()).grid(row=0, column=3, padx=5, pady=5)
 
-#Boton para agregar medios de pago
-button_agregar_medios_pago = tk.Button(mi_frame, text="Agregar medio de pago", command= lambda: medio_de_pago_entry_window())
-button_agregar_medios_pago.grid(row=0, column=4, padx=5, pady=5)
+# Boton para agregar medios de pago
+tk.Button(mi_frame, text="Agregar medio de pago", command= lambda: payment_method_entry_window()) .grid(row=0, column=4, padx=5, pady=5)
 
-#Boton para agregar profesionales
-button_agregar_profesionales = tk.Button(mi_frame, text="Agregar profesionales", command= lambda: proffesional_entry_window())
-button_agregar_profesionales.grid(row=0, column=5, padx=5, pady=5)
+# Boton para agregar profesionales
+tk.Button(mi_frame, text="Agregar profesionales", command= lambda: proffesional_entry_window()) .grid(row=0, column=5, padx=5, pady=5)
+# ------------- Fin de la fila de entrada de datos ---------------------
+
+
+# ------------- Inicio de la fila de mostrado de datos ----------------
+#Boton para ver datos generales
+# Fecha | Clienta | Tratamiento | Seña | Medio de Pago | Precio | Profesional | Porcentaje del profesional | Pay cut del profesional
+tk.Button(mi_frame, text="Ver info general", command= lambda: view_general_data_window()).grid(row=1, column=0)
+
+# ------------- Fin de la fila de mostrado de datos -------------------
+
 # Crea la base de datos si no existe
 connect_to_database()
 

@@ -68,7 +68,8 @@ def connect_to_database():
 				quantity				INTEGER NOT NULL,
 				price					FLOAT 	NOT NULL,
 				proffesional_id			INTEGER NOT NULL,
-				FOREIGN KEY(proffesional_id)	REFERENCES Proffesional(proffesional_id) ON DELETE CASCADE
+				senia					INTEGER,
+				FOREIGN KEY(proffesional_id)	REFERENCES Proffesional(proffesional_id) ON DELETE CASCADE,
 				FOREIGN KEY(order_id) 			REFERENCES Orders(order_id) 			 ON DELETE CASCADE,
 				FOREIGN KEY(product_id)			REFERENCES Products(product_id) 		 ON DELETE CASCADE
 			)'''
@@ -97,18 +98,32 @@ def get_product_id_by_name(product):
 	)
 	return db_cursor.fetchall()
 
+def get_product_name_by_id(product_id):
+	db_cursor.execute("SELECT product_name FROM Products WHERE product_id = ?", (product_id,))
+	lista= db_cursor.fetchall()
+	lista = [' '.join(x) for x in lista]
+	lista=lista[0]
+	return lista
+
 def get_products_by_categorie(category_id):
 	'''Retorna una lista con el nombre de cada producto cuya category_id sea igual a la pasada por parametro'''
-
 	db_cursor.execute(
 		"SELECT product_name FROM Products WHERE category_id = ?", (category_id,))
 	return db_cursor.fetchall()
 
-def get_clients():
-	'''Retorna una lista con el nombre de todos los clientes'''
+def get_customers():
+	'''Retorna una lista con el nombre de todos los Customeres'''
 
 	db_cursor.execute("SELECT first_name, last_name FROM Customers")
 	return db_cursor.fetchall()
+
+def get_customer_fullname_by_id(Customer_id):
+	db_cursor.execute("SELECT first_name, last_name FROM Customers WHERE customer_id = ?", (Customer_id,)
+	)
+	lista= db_cursor.fetchall()
+	lista = [' '.join(x) for x in lista]
+	lista=lista[0]
+	return lista
 
 def get_medios_de_pago():
 	'''Retorna una lista con el nombre de todos los medios de pago'''
@@ -116,12 +131,22 @@ def get_medios_de_pago():
 	db_cursor.execute("SELECT payment_method_name FROM Payment_methods")
 	return db_cursor.fetchall()
 
+# esto deberia ser payment_method kjjjjjj
 def get_medio_de_pago_id_by_name(payment_method):
 
 	db_cursor.execute(
-		"SELECT payment_method_id FROM Medio_pago WHERE payment_method_name = ?", (payment_method,)
+		"SELECT payment_method_id FROM Payment_methods WHERE payment_method_name = ?", (payment_method,)
 	)
 	return db_cursor.fetchall()
+
+def get_payment_method_name_by_id(payment_method_id):
+	db_cursor.execute(
+		"SELECT payment_method_name FROM Payment_methods WHERE payment_method_id = ?", (payment_method_id,)
+	)
+	lista= db_cursor.fetchall()
+	lista = [' '.join(x) for x in lista]
+	lista=lista[0]
+	return lista
 
 def get_category_id(category_wanted):
 	'''retorna el id de la categoria pasada por parametro'''
@@ -162,6 +187,14 @@ def get_proffesionales():
 	db_cursor.execute("SELECT first_name, last_name FROM Proffesional")
 	return db_cursor.fetchall()
 
+def get_proffesional_fullname_by_id(proffesional_id):
+	db_cursor.execute(
+		"SELECT first_name, last_name FROM Proffesional WHERE proffesional_id = ?", (proffesional_id,)
+	)
+	lista= db_cursor.fetchall()
+	lista = [' '.join(x) for x in lista]
+	lista= lista[0]
+	return lista
 
 def email_validation(x):
 	a = 0
