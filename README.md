@@ -336,5 +336,5 @@ Project Link: [https://github.com/KrappRamiro/database-puraesencia](https://gith
 [license-shield]: https://img.shields.io/github/license/KrappRamiro/database-puraesencia.svg?style=for-the-badge
 [license-url]: https://github.com/KrappRamiro/database-puraesencia/blob/main/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://www.linkedin.com/in/ramiro-krapp-1555721b2/
+[linkedin-url]: https://linkedin.com/in/Ramiro_Krapp
 [product-screenshot]: images/screenshot.png
